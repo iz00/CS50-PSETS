@@ -65,7 +65,7 @@ bool prime(int number)
     }
 
     // Get the max number necessary for testing in the loop
-    int max_test = number / 2 + 2;
+    int max_test = number / 2;
 
     // Starting from 3 until the half of the number + 2
     // i gets incremented by 2, so it is always odd
