@@ -3,6 +3,9 @@
 #include <cs50.h>
 #include <stdio.h>
 
+// If population is less than 9, it will stagnate
+#define MIN_SIZE 9
+
 int get_start_size(void);
 int get_end_size(int s);
 int calculate_years(int s, int e);
@@ -20,8 +23,7 @@ int main(void)
     printf("Years: %i\n", years);
 }
 
-// Prompts user for start size, checks if greater than or equal to 9
-// Because if less than 9, the population will stagnate
+// Prompts user for start size, checks if greater than or equal to MIN_SIZE
 int get_start_size(void)
 {
     int n;
@@ -29,7 +31,7 @@ int get_start_size(void)
     {
         n = get_int("Start size: ");
     }
-    while (n < 9);
+    while (n < MIN_SIZE);
     return n;
 }
 
