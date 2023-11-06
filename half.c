@@ -8,7 +8,7 @@ float half(float bill, float tax, int tip);
 
 int main(void)
 {
-    // Get bill_amount, tax_percent and tip_percent from user
+    // Prompt for bill_amount, tax_percent and tip_percent
     float bill_amount = get_float("Bill before tax and tip: ");
     float tax_percent = get_float("Sale Tax Percent: ");
     int tip_percent = get_int("Tip percent: ");
@@ -17,7 +17,7 @@ int main(void)
     printf("You will owe $%.2f each!\n", half(bill_amount, tax_percent, tip_percent));
 }
 
-// Calculates half of the bill, apllying tax before tip
+// Calculate half of the bill, apllying tax before tip
 float half(float bill, float tax, int tip)
 {
     // In a division, at least one of the two must be a float for the result to be float
