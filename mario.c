@@ -1,4 +1,4 @@
-// Build two pyramids (left and right alligned) from mario with the height as user input
+// Build two pyramids (right and left alligned) from mario with the height as user input
 
 #include <cs50.h>
 #include <stdio.h>
@@ -45,10 +45,10 @@ void print_char_times(char c, int n)
 // Print pyramids with height n
 void print_pyramids(int n)
 {
-    // Loop height times, i starts at 1 because it is the number of # printed each line
+    // Loop height times, i starts at 1 because it is the number of # printed each line in each pyramid
     for (int i = 1; i <= n; i++)
     {
-        // The number of empty spaces printed in every line is the height - i
+        // The number of empty spaces printed in every line of left pyramid is the height - i
         int num_empty_spaces = n - i;
 
         // Print the left pyramid line
