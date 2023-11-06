@@ -9,10 +9,8 @@ int calculate_years(int s, int e);
 
 int main(void)
 {
-    // Prompt for start size
+    // Prompt for start and end sizes
     int start = get_start_size();
-
-    // Prompt for end size
     int end = get_end_size(start);
 
     // Calculate number of years until we reach threshold
