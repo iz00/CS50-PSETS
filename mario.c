@@ -1,4 +1,4 @@
-// Build a left alligned pyramid from mario with the height as user input
+// Build a right alligned pyramid from mario with the height as user input
 
 #include <cs50.h>
 #include <stdio.h>
