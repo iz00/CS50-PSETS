@@ -1,4 +1,4 @@
-// Calculates number of years to get from start to end size of population
+// Calculate number of years to get from start to end size of population
 
 #include <cs50.h>
 #include <stdio.h>
@@ -23,7 +23,7 @@ int main(void)
     printf("Years: %i\n", years);
 }
 
-// Prompts user for start size, checks if greater than or equal to MIN_SIZE
+// Prompt user for start size, check if greater than or equal to MIN_SIZE
 int get_start_size(void)
 {
     int n;
@@ -35,7 +35,7 @@ int get_start_size(void)
     return n;
 }
 
-// Prompts user for end size, checks if greater than or equal to start size
+// Prompt user for end size, check if greater than or equal to start size
 int get_end_size(int s)
 {
     int n;
@@ -47,7 +47,7 @@ int get_end_size(int s)
     return n;
 }
 
-// Calculates number of years from start size to end size in a loop
+// Calculate number of years from start size to end size in a loop
 int calculate_years(int s, int e)
 {
     int y = 0;
