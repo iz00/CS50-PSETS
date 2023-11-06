@@ -1,29 +1,52 @@
+// Build a left alligned pyramid from mario with the height as user input
+
 #include <cs50.h>
 #include <stdio.h>
 
+#define MIN_HEIGHT 1
+#define MAX_HEIGHT 8
+
+int get_height(void);
+void print_char_times(char c, int n);
+void print_pyramid(int n);
+
 int main(void)
 {
-    int height;
+    int height = get_height();
+
+    print_pyramid(height);
+}
+
+int get_height(void)
+{
+    int n;
     do
     {
-        height = get_int("Height: ");
+        n = get_int("Height: ");
     }
-    while ((height < 1) || (height > 8));
+    while ((n < MIN_HEIGHT) || (n > MAX_HEIGHT));
 
-    int j;
+    return n;
+}
 
-    for (int i = 1; i <= height; i++)
+void print_char_times(char c, int n)
+{
+    for (int i = 0; i < n; i++)
     {
-        int num_empty_spaces = height - i;
-        for (j = 0; j < num_empty_spaces; j++)
-        {
-            printf(" ");
-        }
+        printf("%c", c);
+    }
+}
 
-        for (j = 0; j < i; j++)
-        {
-            printf("#");
-        }
+void print_pyramid(int n)
+{
+    for (int i = 1; i <= n; i++)
+    {
+        int num_empty_spaces = n - i;
+
+        print_char_times(' ', num_empty_spaces);
+
+        print_char_times('#', i);
+
         printf("\n");
     }
 }
