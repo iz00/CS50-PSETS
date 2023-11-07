@@ -4,7 +4,8 @@
 int card_digits_amount(long n);
 long power_base_ten(int times);
 int calculate_luhn_sum(long n, int digits);
-bool validate_card(int s, int digits);
+bool initial_validate_card(int s, int digits);
+void check_card_type(int first, int second, int digits);
 
 int main(void)
 {
@@ -14,16 +15,20 @@ int main(void)
 
     int sum = calculate_luhn_sum(number, digits_amount);
 
-    bool valid = validate_card(sum, digits_amount);
+    bool valid = initial_validate_card(sum, digits_amount);
 
     if (valid)
     {
-        printf("VALID\n");
+        int first_digit = number / power_base_ten(digits_amount - 1);
+        int second_digit = number/ power_base_ten(digits_amount - 2);
+
+        check_card_type(first_digit, second_digit, digits_amount);
     }
     else
     {
         printf("INVALID\n");
     }
+
 }
 
 int card_digits_amount(long n)
@@ -69,18 +74,76 @@ int calculate_luhn_sum(long n, int digits)
     return s;
 }
 
-bool validate_card(int s, int digits)
+bool initial_validate_card(int s, int digits)
 {
     if (s % 10 != 0)
     {
         return false;
     }
-
     if (digits < 13 || digits > 16 || digits == 14)
     {
         return false;
     }
 
     return true;
+}
 
+void check_card_type(int first, int second, int digits)
+{
+    switch (first)
+    {
+        case 3:
+            switch (second)
+            {
+                case 4:
+                case 7:
+                    if (digits == 15)
+                    {
+                        printf("AMEX\n");
+                    }
+                    else
+                    {
+                        printf("INVALID\n");
+                    }
+                    break;
+                default:
+                    printf("INVALID\n");
+                    break;
+            }
+            break;
+
+        case 5:
+            switch (second)
+            {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    if (digits == 16)
+                    {
+                        printf("MASTERCARD\n");
+                    }
+                    else
+                    {
+                        printf("INVALID\n");
+                    }
+                    break;
+                default:
+                    printf("INVALID\n");
+                    break;
+            }
+            break;
+
+        case 4:
+            if (digits == 13 || digits == 16)
+            {
+                printf("VISA\n");
+            }
+            break;
+
+        default:
+            printf("INVALID\n");
+            break;
+    }
 }
