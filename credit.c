@@ -20,7 +20,7 @@ int main(void)
     if (valid)
     {
         int first_digit = number / power_base_ten(digits_amount - 1);
-        int second_digit = number/ power_base_ten(digits_amount - 2);
+        int second_digit = number/ power_base_ten(digits_amount - 2) % 10;
 
         string card_type = check_card_type(first_digit, second_digit, digits_amount);
 
@@ -30,7 +30,6 @@ int main(void)
     {
         printf("INVALID\n");
     }
-
 }
 
 int card_digits_amount(long n)
