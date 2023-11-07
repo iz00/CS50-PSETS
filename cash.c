@@ -3,6 +3,12 @@
 #include <cs50.h>
 #include <stdio.h>
 
+// Definitions of values of coins
+#define QUARTER_VALUE 25
+#define DIME_VALUE 10
+#define NICKEL_VALUE 5
+#define PENNY_VALUE 1
+
 int get_cents(void);
 int calculate_coins(int cents, int value);
 int calculate_quarters(int cents);
@@ -17,19 +23,19 @@ int main(void)
 
     // Calculate the number of quarters to give the customer
     int quarters = calculate_quarters(cents);
-    cents = cents - quarters * 25;
+    cents = cents - quarters * QUARTER_VALUE;
 
     // Calculate the number of dimes to give the customer
     int dimes = calculate_dimes(cents);
-    cents = cents - dimes * 10;
+    cents = cents - dimes * DIME_VALUE;
 
     // Calculate the number of nickels to give the customer
     int nickels = calculate_nickels(cents);
-    cents = cents - nickels * 5;
+    cents = cents - nickels * NICKEL_VALUE;
 
     // Calculate the number of pennies to give the customer
     int pennies = calculate_pennies(cents);
-    cents = cents - pennies * 1;
+    cents = cents - pennies * PENNY_VALUE;
 
     // Sum coins
     int coins = quarters + dimes + nickels + pennies;
@@ -50,27 +56,27 @@ int get_cents(void)
     return n;
 }
 
-// Calculate the amount of quarters, of value 25
+// Calculate the amount of quarters
 int calculate_quarters(int cents)
 {
-    // Division of two ints will truncate the decimal part, the cents that don't fit in this coin
-    return cents / 25;
+    // Division of two ints will truncate the decimal part, the cents that can't be even one coin of this value
+    return cents / QUARTER_VALUE;
 }
 
-// Calculate the amount of quarters, of value 10
+// Calculate the amount of dimes
 int calculate_dimes(int cents)
 {
-    return cents / 10;
+    return cents / DIME_VALUE;
 }
 
-// Calculate the amount of quarters, of value 5
+// Calculate the amount of nickels
 int calculate_nickels(int cents)
 {
-    return cents / 5;
+    return cents / NICKEL_VALUE;
 }
 
-// Calculate the amount of quarters, of value 1
+// Calculate the amount of pennies
 int calculate_pennies(int cents)
 {
-    return cents / 1;
+    return cents / PENNY_VALUE;
 }
