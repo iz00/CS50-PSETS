@@ -20,7 +20,7 @@ int main(void)
     if (valid)
     {
         int first_digit = number / power_base_ten(digits_amount - 1);
-        int second_digit = number/ power_base_ten(digits_amount - 2) % 10;
+        int second_digit = number / power_base_ten(digits_amount - 2) % 10;
 
         string card_type = check_card_type(first_digit, second_digit, digits_amount);
 
@@ -85,7 +85,6 @@ bool initial_validate_card(int s, int digits)
     {
         return false;
     }
-
     return true;
 }
 
@@ -99,17 +98,8 @@ string check_card_type(int first, int second, int digits)
             {
                 return "AMEX\n";
             }
-            else
-            {
-                return "INVALID\n";
-            }
-        }
-        else
-        {
-            return "INVALID\n";
         }
     }
-
     if (first == 5)
     {
         if (second == 1 || second == 2 || second == 3 || second == 4 || second == 5)
@@ -118,30 +108,14 @@ string check_card_type(int first, int second, int digits)
             {
                 return "MASTERCARD\n";
             }
-            else
-            {
-                return "INVALID\n";
-            }
-        }
-        else
-        {
-            return "INVALID\n";
         }
     }
-
     if (first == 4)
     {
         if (digits == 13 || digits == 16)
         {
             return "VISA\n";
         }
-        else
-        {
-            return "INVALID\n";
-        }
     }
-    else
-    {
-        return "INVALID\n";
-    }
+    return "INVALID\n";
 }
