@@ -1,3 +1,5 @@
+// Validate a card number with luhn's algorithm and check card brand
+
 #include <cs50.h>
 #include <stdio.h>
 
@@ -9,6 +11,7 @@ string validate_card_check_type(long n, int s, int digits);
 
 int main(void)
 {
+    // Prompt user for card number, long because can't fit in int
     long number = get_long("Number: ");
 
     int digits_amount = card_digits_amount(number);
@@ -17,19 +20,18 @@ int main(void)
 
     string card_type = validate_card_check_type(number, sum, digits_amount);
 
-    printf("%s", card_type);
-
+    printf("%s\n", card_type);
 }
 
+// Calcute amount of digits in card number, because it's used in other functions
 int card_digits_amount(long n)
 {
-    long update_number = n;
     int digits = 0;
 
-    while (update_number > 0)
+    while (n > 0)
     {
         digits++;
-        update_number /= 10;
+        n /= 10;
     }
     return digits;
 }
@@ -70,7 +72,7 @@ string validate_card_check_type(long n, int s, int digits)
 {
     if (s % 10 != 0)
     {
-        return "INVALID\n";
+        return "INVALID";
     }
 
     int first_digit = n / power_base_ten(digits - 1);
@@ -83,7 +85,7 @@ string validate_card_check_type(long n, int s, int digits)
             {
                 if (digits == 15)
                 {
-                    return "AMEX\n";
+                    return "AMEX";
                 }
             }
             break;
@@ -93,7 +95,7 @@ string validate_card_check_type(long n, int s, int digits)
             {
                 if (digits == 16)
                 {
-                    return "MASTERCARD\n";
+                    return "MASTERCARD";
                 }
             }
             break;
@@ -101,9 +103,9 @@ string validate_card_check_type(long n, int s, int digits)
         case 4:
             if (digits == 13 || digits == 16)
             {
-                return "VISA\n";
+                return "VISA";
             }
             break;
     }
-    return "INVALID\n";
+    return "INVALID";
 }
