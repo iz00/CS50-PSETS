@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 int get_cents(void);
+int calculate_coins(int cents, int value);
 int calculate_quarters(int cents);
 int calculate_dimes(int cents);
 int calculate_nickels(int cents);
@@ -46,46 +47,33 @@ int get_cents(void)
     return n;
 }
 
-int calculate_quarters(int cents)
+int calculate_coins(int cents, int value)
 {
     int coins = 0;
-    while (cents >= 25)
+    while (cents >= value)
     {
         coins++;
-        cents -= 25;
+        cents -= value;
     }
     return coins;
+}
+
+int calculate_quarters(int cents)
+{
+    return calculate_coins(cents, 25);
 }
 
 int calculate_dimes(int cents)
 {
-    int coins = 0;
-    while (cents >= 10)
-    {
-        coins++;
-        cents -= 10;
-    }
-    return coins;
+    return calculate_coins(cents, 10);
 }
 
 int calculate_nickels(int cents)
 {
-    int coins = 0;
-    while (cents >= 5)
-    {
-        coins++;
-        cents -= 5;
-    }
-    return coins;
+    return calculate_coins(cents, 5);
 }
 
 int calculate_pennies(int cents)
 {
-    int coins = 0;
-    while (cents >= 1)
-    {
-        coins++;
-        cents -= 1;
-    }
-    return coins;
+    return calculate_coins(cents, 1);
 }
