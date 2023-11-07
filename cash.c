@@ -50,23 +50,10 @@ int get_cents(void)
     return n;
 }
 
-// Calculate amount of coins of certain value
-int calculate_coins(int cents, int value)
-{
-    int coins = 0;
-    // Loop until cents is less than value, to see if the coin value fits
-    while (cents >= value)
-    {
-        // A new coin of value is added, so cents is decreased by value
-        coins++;
-        cents -= value;
-    }
-    return coins;
-}
-
 // Calculate the amount of quarters, of value 25
 int calculate_quarters(int cents)
 {
+    // Division of two ints will truncate the decimal part, the cents that don't fit in this coin
     return cents / 25;
 }
 
