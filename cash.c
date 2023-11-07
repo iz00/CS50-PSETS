@@ -67,23 +67,23 @@ int calculate_coins(int cents, int value)
 // Calculate the amount of quarters, of value 25
 int calculate_quarters(int cents)
 {
-    return calculate_coins(cents, 25);
+    return cents / 25;
 }
 
 // Calculate the amount of quarters, of value 10
 int calculate_dimes(int cents)
 {
-    return calculate_coins(cents, 10);
+    return cents / 10;
 }
 
 // Calculate the amount of quarters, of value 5
 int calculate_nickels(int cents)
 {
-    return calculate_coins(cents, 5);
+    return cents / 5;
 }
 
 // Calculate the amount of quarters, of value 1
 int calculate_pennies(int cents)
 {
-    return calculate_coins(cents, 1);
+    return cents / 1;
 }
