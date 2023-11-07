@@ -108,7 +108,7 @@ void check_card_type(int first, int second, int digits)
             {
                 printf("INVALID\n");
             }
-        break;
+            break;
 
         case 5:
             if (second == 1 || second == 2 || second == 3 || second == 4 || second == 5)
@@ -126,7 +126,7 @@ void check_card_type(int first, int second, int digits)
             {
                 printf("INVALID\n");
             }
-        break;
+            break;
 
         case 4:
             if (digits == 13 || digits == 16)
@@ -137,6 +137,7 @@ void check_card_type(int first, int second, int digits)
             {
                 printf("INVALID\n");
             }
+            break;
 
         default:
             printf("INVALID\n");
