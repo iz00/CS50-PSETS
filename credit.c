@@ -93,24 +93,22 @@ void check_card_type(int first, int second, int digits)
     switch (first)
     {
         case 3:
-            switch (second)
+            if (second == 4 || second == 7)
             {
-                case 4:
-                case 7:
-                    if (digits == 15)
-                    {
-                        printf("AMEX\n");
-                    }
-                    else
-                    {
-                        printf("INVALID\n");
-                    }
-                    break;
-                default:
+                if (digits == 15)
+                {
+                    printf("AMEX\n");
+                }
+                else
+                {
                     printf("INVALID\n");
-                    break;
+                }
             }
-            break;
+            else
+            {
+                printf("INVALID\n");
+            }
+        break;
 
         case 5:
             switch (second)
