@@ -10,7 +10,6 @@
 #define PENNY_VALUE 1
 
 int get_cents(void);
-int calculate_coins(int cents, int value);
 int calculate_quarters(int cents);
 int calculate_dimes(int cents);
 int calculate_nickels(int cents);
