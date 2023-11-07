@@ -4,7 +4,7 @@
 int card_digits_amount(long n);
 long power_base_ten(int times);
 int calculate_luhn_sum(long n, int digits);
-bool initial_validate_card(int s, int digits);
+bool validate_checksum(int s);
 string check_card_type(int first, int second, int digits);
 
 int main(void)
@@ -15,7 +15,7 @@ int main(void)
 
     int sum = calculate_luhn_sum(number, digits_amount);
 
-    bool valid = initial_validate_card(sum, digits_amount);
+    bool valid = validate_checksum(sum);
 
     if (valid)
     {
@@ -75,13 +75,9 @@ int calculate_luhn_sum(long n, int digits)
     return s;
 }
 
-bool initial_validate_card(int s, int digits)
+bool validate_checksum(int s)
 {
     if (s % 10 != 0)
-    {
-        return false;
-    }
-    if (digits < 13 || digits > 16 || digits == 14)
     {
         return false;
     }
