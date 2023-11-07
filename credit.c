@@ -5,7 +5,7 @@ int card_digits_amount(long n);
 long power_base_ten(int times);
 int calculate_luhn_sum(long n, int digits);
 bool validate_checksum(int s);
-string check_card_type(int first, int second, int digits);
+string validate_card_check_type(long n, int s, int digits);
 
 int main(void)
 {
@@ -15,27 +15,17 @@ int main(void)
 
     int sum = calculate_luhn_sum(number, digits_amount);
 
-    bool valid = validate_checksum(sum);
+    string card_type = validate_card_check_type(number, sum, digits_amount);
 
-    if (valid)
-    {
-        int first_digit = number / power_base_ten(digits_amount - 1);
-        int second_digit = number / power_base_ten(digits_amount - 2) % 10;
+    printf("%s", card_type);
 
-        string card_type = check_card_type(first_digit, second_digit, digits_amount);
-
-        printf("%s", card_type);
-    }
-    else
-    {
-        printf("INVALID\n");
-    }
 }
 
 int card_digits_amount(long n)
 {
     long update_number = n;
     int digits = 0;
+
     while (update_number > 0)
     {
         digits++;
@@ -62,6 +52,7 @@ int calculate_luhn_sum(long n, int digits)
     for (int i = 0; i < digits; i++)
     {
         digit = n % power_base_ten(i + 1) / power_base_ten(i);
+
         if (i % 2 == 0)
         {
             s += digit;
@@ -75,43 +66,44 @@ int calculate_luhn_sum(long n, int digits)
     return s;
 }
 
-bool validate_checksum(int s)
+string validate_card_check_type(long n, int s, int digits)
 {
     if (s % 10 != 0)
     {
-        return false;
+        return "INVALID\n";
     }
-    return true;
-}
 
-string check_card_type(int first, int second, int digits)
-{
-    if (first == 3)
+    int first_digit = n / power_base_ten(digits - 1);
+    int second_digit = n / power_base_ten(digits - 2) % 10;
+
+    switch (first_digit)
     {
-        if (second == 4 || second == 7)
-        {
-            if (digits == 15)
+        case 3:
+            if (second_digit == 4 || second_digit == 7)
             {
-                return "AMEX\n";
+                if (digits == 15)
+                {
+                    return "AMEX\n";
+                }
             }
-        }
-    }
-    if (first == 5)
-    {
-        if (second == 1 || second == 2 || second == 3 || second == 4 || second == 5)
-        {
-            if (digits == 16)
+            break;
+
+        case 5:
+            if (second_digit > 0 && second_digit < 6)
             {
-                return "MASTERCARD\n";
+                if (digits == 16)
+                {
+                    return "MASTERCARD\n";
+                }
             }
-        }
-    }
-    if (first == 4)
-    {
-        if (digits == 13 || digits == 16)
-        {
-            return "VISA\n";
-        }
+            break;
+
+        case 4:
+            if (digits == 13 || digits == 16)
+            {
+                return "VISA\n";
+            }
+            break;
     }
     return "INVALID\n";
 }
