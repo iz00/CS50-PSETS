@@ -138,7 +138,10 @@ void check_card_type(int first, int second, int digits)
             {
                 printf("VISA\n");
             }
-            break;
+            else
+            {
+                printf("INVALID\n");
+            }
 
         default:
             printf("INVALID\n");
