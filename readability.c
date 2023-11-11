@@ -59,8 +59,8 @@ int count_words(string s)
             n++;
         }
     }
-    // Return n++ because the spaces are between words, so n would return one less word than should
-    return n++;
+    // Return ++n because the spaces are between words, so n would return one less word than should
+    return ++n;
 }
 
 // Calculate how many sentences string s has
