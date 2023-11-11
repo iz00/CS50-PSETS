@@ -1,3 +1,5 @@
+// Simulate a game of scrabble, that scores words based on a mapping of letters to points
+
 #include <ctype.h>
 #include <cs50.h>
 #include <stdio.h>
@@ -10,7 +12,7 @@ int compute_score(string word);
 
 int main(void)
 {
-    // Get input words from both players
+    // Prompt words from both players
     string word1 = get_string("Player 1: ");
     string word2 = get_string("Player 2: ");
 
@@ -18,7 +20,7 @@ int main(void)
     int score1 = compute_score(word1);
     int score2 = compute_score(word2);
 
-    // TODO: Print the winner
+    // Print the winner
     if (score1 > score2)
     {
         printf("Player 1 wins!\n");
@@ -33,17 +35,16 @@ int main(void)
     }
 }
 
+// Compute and return score for word
 int compute_score(string word)
 {
-    // TODO: Compute and return score for string
+
     int score = 0;
-    int position;
-    for (int i = 0, n = strlen(word); i < n; i++)
+    for (int i = 0, len = strlen(word); i < len; i++)
     {
         if (isalpha(word[i]))
         {
-            position = toupper(word[i]) - 65;
-            score += POINTS[position];
+            score += POINTS[toupper(word[i]) - 'A'];
         }
     }
     return score;
