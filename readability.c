@@ -7,6 +7,8 @@
 int count_letters(string s);
 int count_words(string s);
 int count_sentences(string s);
+int calculate_index(int letters, int words, int sentences);
+void check_print_grade(int n);
 
 int main(void)
 {
@@ -18,12 +20,9 @@ int main(void)
     int words_count = count_words(text);
     int sentences_count = count_sentences(text);
 
-    float L = letters_count / (float) words_count * 100.0;
-    float S = sentences_count / (float) words_count * 100.0;
+    int index = calculate_index(letters_count, words_count, sentences_count);
 
-    int index = round(0.0588 * L - 0.296 * S - 15.8);
-
-    printf("Grade %i\n", index);
+    check_print_grade(index);
 }
 
 int count_letters(string s)
@@ -64,4 +63,28 @@ int count_sentences(string s)
         }
     }
     return n;
+}
+
+int calculate_index(int letters, int words, int sentences)
+{
+    float L = letters / (float) words * 100;
+    float S = sentences / (float) words * 100;
+
+    return round(0.0588 * L - 0.296 * S - 15.8);
+}
+
+void check_print_grade(int n)
+{
+    if (n < 1)
+    {
+        printf("Before Grade 1\n");
+    }
+    else if (n > 15)
+    {
+        printf("Grade 16+\n");
+    }
+    else
+    {
+        printf("Grade %i\n", n);
+    }
 }
