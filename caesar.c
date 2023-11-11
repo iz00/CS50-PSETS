@@ -30,14 +30,11 @@ int main(int argc, string argv[])
         return 1;
     }
 
-    // Convert argument from string to int, to be the key
-    int key = atoi(argv[1]);
-
     // Prompt user from plaintext
     string plaintext = get_string("Plaintext:  ");
 
-    // Encode plaintext and print ciphertext
-    print_ciphertext(plaintext, key);
+    // Encode plaintext with the key, converted from string to int, and print ciphertext
+    print_ciphertext(plaintext, atoi(argv[1]));
 
     return 0;
 }
@@ -75,22 +72,22 @@ bool validate_argument(string v)
 }
 
 // Encode the text with the key and print it
-void print_ciphertext(string text, int k)
+void print_ciphertext(string text, int key)
 {
     printf("Ciphertext: ");
 
     // Loop through text to get each character through i, len is calculated first for efficiency
     for (int i = 0, len = strlen(text); i < len; i++)
     {
-        // Get alphabetical index of letter, then rotate it by k positions, using modulo
+        // Get alphabetical index of letter, then rotate it by key positions, using modulo
         // Then return the index to ASCII, and print the letter, respecting the case
         if (isupper(text[i]))
         {
-            printf("%c", (text[i] - 'A' + k) % ALPHABET_LENGTH + 'A');
+            printf("%c", (text[i] - 'A' + key) % ALPHABET_LENGTH + 'A');
         }
         else if (islower(text[i]))
         {
-            printf("%c", (text[i] - 'a' + k) % ALPHABET_LENGTH + 'a');
+            printf("%c", (text[i] - 'a' + key) % ALPHABET_LENGTH + 'a');
         }
         // If character not a letter, just print it
         else
