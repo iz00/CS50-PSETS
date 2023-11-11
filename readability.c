@@ -35,8 +35,8 @@ int main(void)
         }
     }
 
-float L = letters_count / words_count * 100.0;
-float S = sentences_count / words_count * 100.0;
+float L = letters_count / (float) words_count * 100.0;
+float S = sentences_count / (float) words_count * 100.0;
 
 int index = round(0.0588 * L - 0.296 * S - 15.8);
 
