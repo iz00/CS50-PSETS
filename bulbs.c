@@ -11,15 +11,13 @@ int main(void)
     string message = get_string("Message: ");
 
     int character_binary[BITS_IN_BYTE];
-    int message_character;
 
     for (int i = 0, len = strlen(message); i < len; i++)
     {
-        message_character = message[i];
         for (int j = 1; j <= BITS_IN_BYTE; j++)
         {
-            character_binary[BITS_IN_BYTE - j] = message_character % 2;
-            message_character /= 2;
+            character_binary[BITS_IN_BYTE - j] = message[i] % 2;
+            message[i] /= 2;
         }
         for (int j = 0; j < BITS_IN_BYTE; j++)
         {
