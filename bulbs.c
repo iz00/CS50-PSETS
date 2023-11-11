@@ -35,11 +35,11 @@ void convert_character_binary(int character_binary[], int character_decimal)
 {
     // Loop the size of the array, and, starting from its end, fills it with binary digits
     for (int i = 0; i < BITS_IN_BYTE; i++)
-        {
-            // Converts decimal character to binary through divisions of 2
-            character_binary[BITS_IN_BYTE - 1 - i] = character_decimal % 2;
-            character_decimal /= 2;
-        }
+    {
+        // Converts decimal character to binary through divisions of 2
+        character_binary[BITS_IN_BYTE - 1 - i] = character_decimal % 2;
+        character_decimal /= 2;
+    }
 }
 
 // Print bulb equivalent to binary digit as input
