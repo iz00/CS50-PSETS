@@ -30,7 +30,7 @@ int main(int argc, string argv[])
         return 1;
     }
 
-    string text = get_string("Plaintext:  ");
+    string text = get_string("plaintext:  ");
 
     for (int i = 0, len = strlen(text); i < len; i++)
     {
@@ -40,7 +40,7 @@ int main(int argc, string argv[])
         }
     }
 
-    printf("Ciphertext: %s\n", text);
+    printf("ciphertext: %s\n", text);
 
     return 0;
 }
