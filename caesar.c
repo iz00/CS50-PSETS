@@ -1,3 +1,5 @@
+// Encode a message using Caesar's cipher, given a key and plaintext input by user
+
 #include <cs50.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -8,10 +10,12 @@
 
 bool validate_argc(int c);
 bool validate_argument(string v);
+void print_ciphertext(string text, int k);
 
 int main(int argc, string argv[])
 {
 
+    // Variable command_argument_valid is true if command line argument is valid, false otherwise
     bool command_argument_valid = validate_argc(argc);
 
     if (command_argument_valid)
@@ -19,39 +23,26 @@ int main(int argc, string argv[])
         command_argument_valid = validate_argument(argv[1]);
     }
 
-    if (! command_argument_valid)
+    // If command line argument not valid, print a usage message and return 1 for error
+    if (!command_argument_valid)
     {
         printf("Usage: ./caesar key\n");
         return 1;
     }
 
+    // Convert argument from string to int, to be the key
     int key = atoi(argv[1]);
 
+    // Prompt user from plaintext
     string plaintext = get_string("Plaintext:  ");
 
-    printf("Ciphertext: ");
-
-    for (int i = 0, len = strlen(plaintext); i < len; i++)
-    {
-        if (isupper(plaintext[i]))
-        {
-            printf("%c", (plaintext[i] - 'A' + key) % ALPHABET_LENGTH + 'A');
-        }
-        else if (islower(plaintext[i]))
-        {
-            printf("%c", (plaintext[i] - 'a' + key) % ALPHABET_LENGTH + 'a');
-        }
-        else
-        {
-            printf("%c", plaintext[i]);
-        }
-    }
-
-    printf("\n");
+    // Encode plaintext and print ciphertext
+    print_ciphertext(plaintext, key);
 
     return 0;
 }
 
+// Validate amount of arguments, if not 2, return false
 bool validate_argc(int c)
 {
     if (c != 2)
@@ -61,17 +52,19 @@ bool validate_argc(int c)
     return true;
 }
 
-
+// Validate argument, if passed validation of argc
 bool validate_argument(string v)
 {
+    // All characters of argument have to be digits
     for (int i = 0, len = strlen(v); i < len; i++)
     {
-        if (isdigit(v[i]) == 0)
+        if (!isdigit(v[i]))
         {
             return false;
         }
     }
 
+    // If is digit, the number has to be 0 or positive
     if (atoi(v) < 0)
     {
         printf("Usage: ./caesar key\n");
@@ -79,4 +72,31 @@ bool validate_argument(string v)
     }
 
     return true;
+}
+
+// Encode the text with the key and print it
+void print_ciphertext(string text, int k)
+{
+    printf("Ciphertext: ");
+
+    // Loop through text to get each character through i, len is calculated first for efficiency
+    for (int i = 0, len = strlen(text); i < len; i++)
+    {
+        // Get alphabetical index of letter, then rotate it by k positions, using modulo
+        // Then return the index to ASCII, and print the letter, respecting the case
+        if (isupper(text[i]))
+        {
+            printf("%c", (text[i] - 'A' + k) % ALPHABET_LENGTH + 'A');
+        }
+        else if (islower(text[i]))
+        {
+            printf("%c", (text[i] - 'a' + k) % ALPHABET_LENGTH + 'a');
+        }
+        // If character not a letter, just print it
+        else
+        {
+            printf("%c", text[i]);
+        }
+    }
+    printf("\n");
 }
