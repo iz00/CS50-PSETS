@@ -1,7 +1,7 @@
 // Simulate a game of scrabble, that scores words based on a mapping of letters to points
 
-#include <ctype.h>
 #include <cs50.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
