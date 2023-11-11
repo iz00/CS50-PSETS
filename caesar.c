@@ -36,11 +36,11 @@ int main(int argc, string argv[])
     {
         if (isupper(text[i]))
         {
-            text[i] = ((text[i] - 'A') + (key % 26)) % 26 + 'A';
+            text[i] = ((text[i] - 'A') + (key)) % 26 + 'A';
         }
         if (islower(text[i]))
         {
-            text[i] = ((text[i] - 'a') + (key % 26)) % 26 + 'a';
+            text[i] = ((text[i] - 'a') + (key)) % 26 + 'a';
         }
     }
 
