@@ -4,27 +4,31 @@
 
 const int BITS_IN_BYTE = 8;
 
+void convert_character_binary(int character_binary[], int character_decimal);
 void print_bulb(int bit);
+void print_character_bulbs(int character_binary[]);
 
 int main(void)
 {
     string message = get_string("Message: ");
 
-    int character_binary[BITS_IN_BYTE];
+    int character_binary_digits[BITS_IN_BYTE];
 
     for (int i = 0, len = strlen(message); i < len; i++)
     {
-        for (int j = 1; j <= BITS_IN_BYTE; j++)
-        {
-            character_binary[BITS_IN_BYTE - j] = message[i] % 2;
-            message[i] /= 2;
-        }
-        for (int j = 0; j < BITS_IN_BYTE; j++)
-        {
-            print_bulb(character_binary[j]);
-        }
-        printf("\n");
+        convert_character_binary(character_binary_digits, message[i]);
+
+        print_character_bulbs(character_binary_digits);
     }
+}
+
+void convert_character_binary(int character_binary[], int character_decimal)
+{
+    for (int i = 0; i < BITS_IN_BYTE; i++)
+        {
+            character_binary[BITS_IN_BYTE - 1 - i] = character_decimal % 2;
+            character_decimal /= 2;
+        }
 }
 
 void print_bulb(int bit)
@@ -39,4 +43,13 @@ void print_bulb(int bit)
         // Light emoji
         printf("\U0001F7E1");
     }
+}
+
+void print_character_bulbs(int character_binary[])
+{
+    for (int i = 0; i < BITS_IN_BYTE; i++)
+    {
+        print_bulb(character_binary[i]);
+    }
+    printf("\n");
 }
