@@ -34,9 +34,13 @@ int main(int argc, string argv[])
 
     for (int i = 0, len = strlen(text); i < len; i++)
     {
-        if (isalpha(text[i]))
+        if (isupper(text[i]))
         {
-            text[i] = (text[i] + (key % 26));
+            text[i] = ((text[i] - 'A') + (key % 26)) % 26 + 'A';
+        }
+        if (islower(text[i]))
+        {
+            text[i] = ((text[i] - 'a') + (key % 26)) % 26 + 'a';
         }
     }
 
