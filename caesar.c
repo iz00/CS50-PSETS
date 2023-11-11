@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ALPHABET_LENGTH 26
+
 bool validate_argc(int c);
 bool validate_argument(string v);
 
@@ -25,21 +27,27 @@ int main(int argc, string argv[])
 
     int key = atoi(argv[1]);
 
-    string text = get_string("plaintext:  ");
+    string plaintext = get_string("Plaintext:  ");
 
-    for (int i = 0, len = strlen(text); i < len; i++)
+    printf("Ciphertext: ");
+
+    for (int i = 0, len = strlen(plaintext); i < len; i++)
     {
-        if (isupper(text[i]))
+        if (isupper(plaintext[i]))
         {
-            text[i] = (text[i] - 'A' + key) % 26 + 'A';
+            printf("%c", (plaintext[i] - 'A' + key) % ALPHABET_LENGTH + 'A');
         }
-        if (islower(text[i]))
+        else if (islower(plaintext[i]))
         {
-            text[i] = (text[i] - 'a' + key) % 26 + 'a';
+            printf("%c", (plaintext[i] - 'a' + key) % ALPHABET_LENGTH + 'a');
+        }
+        else
+        {
+            printf("%c", plaintext[i]);
         }
     }
 
-    printf("ciphertext: %s\n", text);
+    printf("\n");
 
     return 0;
 }
