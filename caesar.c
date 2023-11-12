@@ -31,7 +31,7 @@ int main(int argc, string argv[])
     }
 
     // Prompt user for plaintext
-    string plaintext = get_string("Plaintext:  ");
+    string plaintext = get_string("plaintext:  ");
 
     // Encode plaintext with the key, converted from string to int, and print ciphertext
     print_ciphertext(plaintext, atoi(argv[1]));
@@ -74,7 +74,7 @@ bool validate_argument(string v)
 // Encode the text with the key and print it
 void print_ciphertext(string text, int key)
 {
-    printf("Ciphertext: ");
+    printf("ciphertext: ");
 
     // Loop through text to get each character through i, len is calculated first for efficiency
     for (int i = 0, len = strlen(text); i < len; i++)
