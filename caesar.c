@@ -10,7 +10,7 @@
 
 bool validate_argc(int c);
 bool validate_argument(string v);
-void print_ciphertext(string text, int k);
+void print_ciphertext(string text, int key);
 
 int main(int argc, string argv[])
 {
