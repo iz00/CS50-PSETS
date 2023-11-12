@@ -30,7 +30,7 @@ int main(int argc, string argv[])
         return 1;
     }
 
-    // Prompt user from plaintext
+    // Prompt user for plaintext
     string plaintext = get_string("Plaintext:  ");
 
     // Encode plaintext with the key, converted from string to int, and print ciphertext
