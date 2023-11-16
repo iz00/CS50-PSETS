@@ -214,14 +214,14 @@ void print_winner(void)
         int j;
         for (j = 0; j < candidate_count; j++)
         {
-            if (locked[i][j])
+            if (locked[j][i])
             {
                 undefeated = false;
             }
         }
         if (undefeated)
         {
-            printf("%s\n", candidates[j]);
+            printf("%s\n", candidates[i]);
         }
     }
 }
