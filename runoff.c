@@ -34,20 +34,22 @@ void eliminate(int min);
 
 int main(int argc, string argv[])
 {
-    // Check for invalid usage
+    // Check for no candidates, invalid usage
     if (argc < 2)
     {
         printf("Usage: runoff [candidate ...]\n");
         return 1;
     }
 
-    // Populate array of candidates
+    // Check for too many candidates, invalid usage
     candidate_count = argc - 1;
     if (candidate_count > MAX_CANDIDATES)
     {
         printf("Maximum number of candidates is %i\n", MAX_CANDIDATES);
         return 2;
     }
+
+    // Populate array of candidates
     for (int i = 0; i < candidate_count; i++)
     {
         candidates[i].name = argv[i + 1];
@@ -55,6 +57,7 @@ int main(int argc, string argv[])
         candidates[i].eliminated = false;
     }
 
+    // Check for too many voters
     voter_count = get_int("Number of voters: ");
     if (voter_count > MAX_VOTERS)
     {
@@ -129,6 +132,7 @@ bool vote(int voter, int rank, string name)
 {
     for (int i = 0; i < candidate_count; i++)
     {
+        // Case insensitive, update preferences if candidate found
         if (strcasecmp(candidates[i].name, name) == 0)
         {
             preferences[voter][rank] = i;
@@ -145,6 +149,7 @@ void tabulate(void)
     {
         for (int j = 0; j < candidate_count; j++)
         {
+            // If candidate on jth rank of voter i is not eliminated, update votes
             if (!candidates[preferences[i][j]].eliminated)
             {
                 candidates[preferences[i][j]].votes++;
@@ -157,6 +162,7 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
+    // To win, candidate needs more than half of all votes
     int votes_needed = voter_count / 2 + 1;
 
     for (int i = 0; i < candidate_count; i++)
@@ -173,10 +179,12 @@ bool print_winner(void)
 // Return the minimum number of votes any remaining candidate has
 int find_min(void)
 {
+    // Initially, first candidate has min votes
     int min = candidates[0].votes;
 
     for (int i = 1; i < candidate_count; i++)
     {
+        // If candidate is not eliminated and has less votes than previous min
         if (!candidates[i].eliminated && candidates[i].votes < min)
         {
             min = candidates[i].votes;
@@ -189,28 +197,18 @@ int find_min(void)
 // Return true if the election is tied between all candidates, false otherwise
 bool is_tie(int min)
 {
-    //int remaining_candidates = 0, candidates_min_votes = 0;
-
     for (int i = 0; i < candidate_count; i++)
     {
+        // If a candidate is not eliminated and doesn't have min votes, there is no tie
         if (!candidates[i].eliminated)
         {
-            //remaining_candidates++;
-
             if (candidates[i].votes != min)
             {
                 return false;
-                //candidates_min_votes++;
             }
         }
     }
     return true;
-
-    //if (remaining_candidates == candidates_min_votes)
-    //{
-    //    return true;
-    //}
-    //return false;
 }
 
 // Eliminate the candidate (or candidates) in last place
@@ -218,6 +216,7 @@ void eliminate(int min)
 {
     for (int i = 0; i < candidate_count; i++)
     {
+        // If candidate has min votes, gets eliminated
         if (candidates[i].votes == min)
         {
             candidates[i].eliminated = true;
