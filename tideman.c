@@ -10,7 +10,7 @@
 // Global 2d array, preferences[i][j] is number of voters who prefer i over j
 int preferences[MAX][MAX];
 
-// Global 2d array locked[i][j] means i is locked in over j
+// Global 2d array, locked[i][j] means i is locked in over j
 bool locked[MAX][MAX];
 
 // Each pair has a winner, loser
@@ -172,14 +172,15 @@ void sort_pairs(void)
         }
     }
     while (swaps_counter != 0);
-
 }
 
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // TODO
-    return;
+    for (int i = 0; i < pair_count; i++)
+    {
+        locked[pairs[i].winner][pairs[i].loser] = true;
+    }
 }
 
 // Print the winner of the election
