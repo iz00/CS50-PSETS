@@ -2,7 +2,6 @@
 
 #include <cs50.h>
 #include <stdio.h>
-#include <string.h>
 #include <strings.h>
 
 // Max number of candidates
