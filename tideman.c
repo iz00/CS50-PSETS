@@ -122,7 +122,7 @@ void record_preferences(int ranks[])
     {
         for (int j = i + 1; j < candidate_count; j++)
         {
-                preferences[ranks[i]][ranks[j]]++;
+            preferences[ranks[i]][ranks[j]]++;
         }
     }
 }
@@ -150,7 +150,7 @@ void add_pairs(void)
     }
 }
 
-// Sort pairs in decreasing order by strength of victory
+// Sort pairs in decreasing order by strength of victory, using bubble sort
 void sort_pairs(void)
 {
     int swaps_counter;
@@ -159,8 +159,11 @@ void sort_pairs(void)
         swaps_counter = 0;
         for (int i = 0; i < pair_count - 1; i++)
         {
-            int strength_victory_pair1 = preferences[pairs[i].winner][pairs[i].loser] - preferences[pairs[i].loser][pairs[i].winner];
-            int strength_victory_pair2 = preferences[pairs[i + 1].winner][pairs[i + 1].loser] - preferences[pairs[i + 1].loser][pairs[i + 1].winner];
+            int strength_victory_pair1 =
+                preferences[pairs[i].winner][pairs[i].loser] - preferences[pairs[i].loser][pairs[i].winner];
+
+            int strength_victory_pair2 =
+                preferences[pairs[i + 1].winner][pairs[i + 1].loser] - preferences[pairs[i + 1].loser][pairs[i + 1].winner];
 
             if (strength_victory_pair1 < strength_victory_pair2)
             {
@@ -175,8 +178,10 @@ void sort_pairs(void)
     while (swaps_counter != 0);
 }
 
+// Check if a cycle will be created when edge1 and edge2 get locked
 bool cycle(int edge1, int edge2)
 {
+    // Base case
     if (locked[edge2][edge1])
     {
         return true;
@@ -184,6 +189,7 @@ bool cycle(int edge1, int edge2)
 
     for (int i = 0; i < candidate_count; i++)
     {
+        // Recursive case
         if (locked[edge2][i] && cycle(edge1, i))
         {
             return true;
@@ -210,15 +216,18 @@ void print_winner(void)
 {
     for (int i = 0; i < candidate_count; i++)
     {
+        // Flag if candidate i has no lockings pointing at them
         bool undefeated = true;
-        int j;
-        for (j = 0; j < candidate_count; j++)
+
+        for (int j = 0; j < candidate_count; j++)
         {
+            // Check for all other candidates if there is locking over i
             if (locked[j][i])
             {
                 undefeated = false;
             }
         }
+
         if (undefeated)
         {
             printf("%s\n", candidates[i]);
