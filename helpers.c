@@ -1,21 +1,24 @@
+// Function to change black pixels of image to another color
+
 #include "helpers.h"
 
+// Change all black pixels to a color of choosing
 void colorize(int height, int width, RGBTRIPLE image[height][width])
 {
-    // Change all black pixels to a color of your choosing
+    // Iterate through image's pixels, in the matrix of height(i) and width(j)
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
             RGBTRIPLE pixel = image[i][j];
-            BYTE red_amount = pixel.rgbtRed;
-            BYTE green_amount = pixel.rgbtGreen;
-            BYTE blue_amount = pixel.rgbtBlue;
-            if (red_amount == 255 && green_amount == 255 && blue_amount == 255)
+
+            // If pixel is black (red, green and blue values of pixel zero), change color
+            if (pixel.rgbtRed == 0x00 && pixel.rgbtGreen == 0x00 && pixel.rgbtBlue == 0x00)
             {
-                image[i][j].rgbtRed = 33;
-                image[i][j].rgbtGreen = 145;
-                image[i][j].rgbtBlue = 251;
+                // 0x2191FB is a blue tone color
+                image[i][j].rgbtRed = 0x21;
+                image[i][j].rgbtGreen = 0x91;
+                image[i][j].rgbtBlue = 0xFB;
             }
         }
     }
