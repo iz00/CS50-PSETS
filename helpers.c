@@ -77,7 +77,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                 {
                     int pixel_height = i + h, pixel_width = j + w;
 
-                    if (pixel_height >= 0 && pixel_height < height - 1 && pixel_width >= 0 && pixel_width < width - 1)
+                    if (pixel_height >= 0 && pixel_height <= height - 1 && pixel_width >= 0 && pixel_width <= width - 1)
                     {
                         average_red += image[pixel_height][pixel_width].rgbtRed;
                         average_green += image[pixel_height][pixel_width].rgbtGreen;
