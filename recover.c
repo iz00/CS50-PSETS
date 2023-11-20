@@ -47,6 +47,8 @@ int main(int argc, char *argv[])
                 return 1;
             }
 
+            fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
+
             files_counter++;
         }
         fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
