@@ -50,11 +50,11 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
     // Iterate through image's pixels, in the matrix of height(i) and width(j)
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width / 2; j++)
+        for (int j = 0; j < width; j++)
         {
             RGBTRIPLE aux = image[i][j];
-            image[i][j] = image[i][width - j];
-            image[i][width - j] = aux;
+            image[i][j] = image[i][width - 1- j];
+            image[i][width - 1 - j] = aux;
         }
     }
 }
