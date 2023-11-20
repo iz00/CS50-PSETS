@@ -4,9 +4,9 @@
 
 #define FILENAME_LENGTH 8
 
-// typedef uint8_t BYTE;
+typedef uint8_t BYTE;
 
-#define BLOCK_SIZE 512
+const int BLOCK_SIZE = 512;
 
 int main(int argc, char *argv[])
 {
@@ -24,16 +24,18 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    uint8_t buffer[BLOCK_SIZE];
     int files_counter = 0;
-    FILE *output = NULL;
+    int found_jpg = 0;
+
+    BYTE buffer[BLOCK_SIZE];
     char filename[FILENAME_LENGTH];
+    FILE *output = NULL;
 
     while (fread(buffer, 1, BLOCK_SIZE, input))
     {
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
-            if (files_counter > 0)
+            if (found_jpg)
             {
                 fclose(output);
             }
@@ -48,10 +50,14 @@ int main(int argc, char *argv[])
                 return 1;
             }
 
+            found_jpg = 1;
             files_counter++;
         }
-
-        fwrite(buffer, 1, BLOCK_SIZE, output);
+        if (found_jpg)
+        {
+            fwrite(buffer, 1, BLOCK_SIZE, output);
+        }
+        
     }
 
     fclose(output);
