@@ -16,9 +16,9 @@ void colorize(int height, int width, RGBTRIPLE image[height][width])
             if (pixel.rgbtRed == 0x00 && pixel.rgbtGreen == 0x00 && pixel.rgbtBlue == 0x00)
             {
                 // 0x2191FB is a blue tone color
-                pixel.rgbtRed = 0x21;
-                pixel.rgbtGreen = 0x91;
-                pixel.rgbtBlue = 0xFB;
+                image[i][j].rgbtRed = 0x21;
+                image[i][j].rgbtGreen = 0x91;
+                image[i][j].rgbtBlue = 0xFB;
             }
         }
     }
