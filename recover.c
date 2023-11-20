@@ -4,9 +4,9 @@
 
 #define FILENAME_LENGTH 8
 
-typedef uint8_t BYTE;
+// typedef uint8_t BYTE;
 
-const int BLOCK_SIZE = 512;
+#define BLOCK_SIZE 512
 
 int main(int argc, char *argv[])
 {
@@ -24,13 +24,13 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    BYTE buffer[BLOCK_SIZE];
+    uint8_t buffer[BLOCK_SIZE];
     int files_counter = 0;
+    FILE *output = NULL;
+    char filename[FILENAME_LENGTH];
 
-    while (fread(buffer, sizeof(BYTE), BLOCK_SIZE, input) == BLOCK_SIZE)
+    while (fread(buffer, 1, BLOCK_SIZE, input))
     {
-        FILE *output = NULL;
-
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
             if (files_counter > 0)
@@ -38,21 +38,23 @@ int main(int argc, char *argv[])
                 fclose(output);
             }
 
-            char filename[FILENAME_LENGTH];
             sprintf(filename, "%03i.jpg", files_counter);
 
             output = fopen(filename, "w");
             if (output == NULL)
             {
+                fclose(input);
+                printf("Could not open file\n");
                 return 1;
             }
 
             files_counter++;
         }
 
-        fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
+        fwrite(buffer, 1, BLOCK_SIZE, output);
     }
 
+    fclose(output);
     fclose(input);
     return 0;
 }
