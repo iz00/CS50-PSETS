@@ -79,14 +79,18 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 
                     if (pixel_height >= 0 && pixel_height < height - 1 && pixel_width >= 0 && pixel_width < width - 1)
                     {
-                        average_red += image[i][j].rgbtRed;
-                        average_green += image[i][j].rgbtGreen;
-                        average_blue += image[i][j].rgbtBlue;
+                        average_red += image[pixel_height][pixel_width].rgbtRed;
+                        average_green += image[pixel_height][pixel_width].rgbtGreen;
+                        average_blue += image[pixel_height][pixel_width].rgbtBlue;
                         pixels_formula++;
                     }
                 }
             }
 
+            // Put average colors in copy's pixels
+            image_copy[i][j].rgbtRed = round(average_red / pixels_formula);
+            image_copy[i][j].rgbtGreen = round(average_green / pixels_formula);
+            image_copy[i][j].rgbtBlue = round(average_blue / pixels_formula);
 
             /*
             average_red += image[i][j].rgbtRed;
@@ -166,11 +170,6 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                 pixels_formula++;
             }
             */
-
-            // Put average colors in copy's pixels
-            image_copy[i][j].rgbtRed = round(average_red / pixels_formula);
-            image_copy[i][j].rgbtGreen = round(average_green / pixels_formula);
-            image_copy[i][j].rgbtBlue = round(average_blue / pixels_formula);
         }
     }
 
