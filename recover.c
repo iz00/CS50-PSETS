@@ -41,18 +41,16 @@ int main(int argc, char *argv[])
             char filename[FILENAME_LENGTH];
             sprintf(filename, "%03i.jpg", files_counter);
 
-            output = fopen(filename, "a");
+            output = fopen(filename, "w");
             if (output == NULL)
             {
                 return 1;
             }
 
-            fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
-
             files_counter++;
         }
+
         fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
-        fclose(output);
     }
 
     fclose(input);
