@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     }
 
     int files_counter = 0;
-    int found_jpg = 0;
+    //int found_jpg = 0;
 
     BYTE buffer[BLOCK_SIZE];
     char filename[FILENAME_LENGTH];
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     {
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
-            if (found_jpg)
+            if (files_counter)
             {
                 fclose(output);
             }
@@ -50,10 +50,10 @@ int main(int argc, char *argv[])
                 return 1;
             }
 
-            found_jpg = 1;
             files_counter++;
         }
-        if (found_jpg)
+
+        if (files_counter)
         {
             fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
         }
