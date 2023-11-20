@@ -53,7 +53,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
         for (int j = 0; j < width / 2; j++)
         {
             RGBTRIPLE aux = image[i][j];
-            image[i][j] = image[i][width - 1- j];
+            image[i][j] = image[i][width - 1 - j];
             image[i][width - 1 - j] = aux;
         }
     }
@@ -63,6 +63,13 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
     RGBTRIPLE image_copy[height][width];
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            image_copy[i][j] = image[i][j];
+        }
+    }
 
     for (int i = 0; i < height; i++)
     {
@@ -79,105 +86,18 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 
                     if (pixel_height >= 0 && pixel_height <= height - 1 && pixel_width >= 0 && pixel_width <= width - 1)
                     {
-                        average_red += image[pixel_height][pixel_width].rgbtRed;
-                        average_green += image[pixel_height][pixel_width].rgbtGreen;
-                        average_blue += image[pixel_height][pixel_width].rgbtBlue;
+                        average_red += image_copy[pixel_height][pixel_width].rgbtRed;
+                        average_green += image_copy[pixel_height][pixel_width].rgbtGreen;
+                        average_blue += image_copy[pixel_height][pixel_width].rgbtBlue;
                         pixels_formula++;
                     }
                 }
             }
 
-            // Put average colors in copy's pixels
-            image_copy[i][j].rgbtRed = round(average_red / pixels_formula);
-            image_copy[i][j].rgbtGreen = round(average_green / pixels_formula);
-            image_copy[i][j].rgbtBlue = round(average_blue / pixels_formula);
-
-            /*
-            average_red += image[i][j].rgbtRed;
-            average_green += image[i][j].rgbtGreen;
-            average_blue += image[i][j].rgbtBlue;
-            pixels_formula++;
-
-            if (i > 0)
-            {
-                // pegar pixel em cima (diminuir i)
-                average_red += image[i - 1][j].rgbtRed;
-                average_green += image[i - 1][j].rgbtGreen;
-                average_blue += image[i - 1][j].rgbtBlue;
-                pixels_formula++;
-
-                if (j > 0)
-                {
-                    // pegar pixel à esquerda (diminuir j)
-                    average_red += image[i - 1][j - 1].rgbtRed;
-                    average_green += image[i - 1][j - 1].rgbtGreen;
-                    average_blue += image[i - 1][j - 1].rgbtBlue;
-                    pixels_formula++;
-                }
-
-                if (j < width - 1)
-                {
-                    // pegar pixel à direita (aumentar j)
-                    average_red += image[i - 1][j + 1].rgbtRed;
-                    average_green += image[i - 1][j + 1].rgbtGreen;
-                    average_blue += image[i - 1][j + 1].rgbtBlue;
-                    pixels_formula++;
-                }
-            }
-
-            if (i < height - 1)
-            {
-                // pegar pixel embaixo (aumentar i)
-                average_red += image[i + 1][j].rgbtRed;
-                average_green += image[i + 1][j].rgbtGreen;
-                average_blue += image[i + 1][j].rgbtBlue;
-                pixels_formula++;
-
-                if (j > 0)
-                {
-                    // pegar pixel à esquerda (diminuir j)
-                    average_red += image[i + 1][j - 1].rgbtRed;
-                    average_green += image[i + 1][j - 1].rgbtGreen;
-                    average_blue += image[i + 1][j - 1].rgbtBlue;
-                    pixels_formula++;
-                }
-
-                if (j < width - 1)
-                {
-                    // pegar pixel à direita (aumentar j)
-                    average_red += image[i + 1][j + 1].rgbtRed;
-                    average_green += image[i + 1][j + 1].rgbtGreen;
-                    average_blue += image[i + 1][j + 1].rgbtBlue;
-                    pixels_formula++;
-                }
-            }
-
-            if (j > 0)
-            {
-                // pegar pixel à esquerda (diminuir j)
-                average_red += image[i][j - 1].rgbtRed;
-                average_green += image[i][j - 1].rgbtGreen;
-                average_blue += image[i][j - 1].rgbtBlue;
-                pixels_formula++;
-            }
-
-            if (j < width - 1)
-            {
-                // pegar pixel à direita (aumentar j)
-                average_red += image[i][j + 1].rgbtRed;
-                average_green += image[i][j + 1].rgbtGreen;
-                average_blue += image[i][j + 1].rgbtBlue;
-                pixels_formula++;
-            }
-            */
-        }
-    }
-
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            image[i][j] = image_copy[i][j];
+            // Put average colors in image's pixels
+            image[i][j].rgbtRed = round(average_red / pixels_formula);
+            image[i][j].rgbtGreen = round(average_green / pixels_formula);
+            image[i][j].rgbtBlue = round(average_blue / pixels_formula);
         }
     }
 }
