@@ -26,10 +26,11 @@ int main(int argc, char *argv[])
 
     BYTE buffer[BLOCK_SIZE];
     int files_counter = 0;
-    FILE *output;
 
     while (fread(buffer, sizeof(BYTE), BLOCK_SIZE, input) == BLOCK_SIZE)
     {
+        FILE *output = NULL;
+
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
             if (files_counter > 0)
@@ -49,9 +50,9 @@ int main(int argc, char *argv[])
             files_counter++;
         }
         fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
+        fclose(output);
     }
 
     fclose(input);
-    fclose(output);
     return 0;
 }
