@@ -30,7 +30,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            // Get average pixel value and apply it to all channels
+            //
             RGBTRIPLE pixel = image[i][j];
 
             int sepia_red = round(pixel.rgbtRed * 0.393 + pixel.rgbtGreen * 0.769 + pixel.rgbtBlue * 0.189);
@@ -47,7 +47,16 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
-    return;
+    // Iterate through image's pixels, in the matrix of height(i) and width(j)
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width / 2; j++)
+        {
+            RGBTRIPLE aux = image[i][j];
+            image[i][j] = image[i][width - j];
+            image[i][width - j] = aux;
+        }
+    }
 }
 
 // Blur image
