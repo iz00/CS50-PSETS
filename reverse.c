@@ -1,3 +1,5 @@
+// Reverse the audio of a WAV file
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,19 +8,18 @@
 
 int check_format(WAVHEADER header);
 int get_block_size(WAVHEADER header);
+void write_reversed_audio(FILE *in, FILE *out, int size);
 
 int main(int argc, char *argv[])
 {
-    // Ensure proper usage
-    // TODO #1
+    // Ensure proper usage (2 command-line arguments)
     if (argc != 3)
     {
         printf("Usage: ./reverse input.wav output.wav\n");
         return 1;
     }
 
-    // Open input file for reading
-    // TODO #2
+    // Open input file in read mode
     FILE *input = fopen(argv[1], "rb");
     if (input == NULL)
     {
@@ -27,12 +28,10 @@ int main(int argc, char *argv[])
     }
 
     // Read header
-    // TODO #3
     WAVHEADER input_header;
     fread(&input_header, sizeof(WAVHEADER), 1, input);
 
     // Use check_format to ensure WAV format
-    // TODO #4
     if (!check_format(input_header))
     {
         printf("Input is not a WAV file.\n");
@@ -40,8 +39,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // Open output file for writing
-    // TODO #5
+    // Open output file in write mode
     FILE *output = fopen(argv[2], "wb");
     if (input == NULL)
     {
@@ -51,27 +49,13 @@ int main(int argc, char *argv[])
     }
 
     // Write header to output file
-    // TODO #6
     fwrite(&input_header, sizeof(WAVHEADER), 1, output);
 
     // Use get_block_size to calculate size of block
-    // TODO #7
     int block_size = get_block_size(input_header);
 
     // Write reversed audio to file
-    // TODO #8
-    int header_position = ftell(input);
-
-    BYTE buffer[block_size];
-
-    fseek(input, block_size * (-1), SEEK_END);
-
-    while (ftell(input) != header_position)
-    {
-        fread(buffer, sizeof(BYTE), block_size, input);
-        fseek(input, block_size * (-2), SEEK_CUR);
-        fwrite(buffer, sizeof(BYTE), block_size, output);
-    }
+    write_reversed_audio(input, output, block_size);
 
     fclose(input);
     fclose(output);
@@ -79,8 +63,10 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+// Check if file is WAV
 int check_format(WAVHEADER header)
 {
+    // Compare the signature format header of WAV files with header from input file
     char signature_format[] = {'W', 'A', 'V', 'E'};
 
     for (int i = 0; i < 4; i++)
@@ -93,7 +79,24 @@ int check_format(WAVHEADER header)
     return 1;
 }
 
+// Get block size (in bytes) through number of channels and bits per sample in input file header
 int get_block_size(WAVHEADER header)
 {
     return header.numChannels * (header.bitsPerSample / 8);
+}
+
+void write_reversed_audio(FILE *in, FILE *out, int size)
+{
+    int header_position = ftell(in);
+
+    BYTE buffer[size];
+
+    fseek(in, size * (-1), SEEK_END);
+
+    while (ftell(in) >= header_position)
+    {
+        fread(buffer, sizeof(BYTE), size, in);
+        fseek(in, size * (-2), SEEK_CUR);
+        fwrite(buffer, sizeof(BYTE), size, out);
+    }
 }
