@@ -60,13 +60,13 @@ int main(int argc, char *argv[])
 
     // Write reversed audio to file
     // TODO #8
-    int input_position = ftell(input);
+    int header_position = ftell(input);
 
     BYTE buffer[block_size];
 
     fseek(input, block_size * (-1), SEEK_END);
 
-    while (ftell(input) >= input_position)
+    while (ftell(input) != header_position)
     {
         fread(buffer, sizeof(BYTE), block_size, input);
         fseek(input, block_size * (-2), SEEK_CUR);
