@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
     while (ftell(input) >= input_position)
     {
         fread(buffer, sizeof(BYTE), block_size, input);
-        fwrite(buffer, sizeof(BYTE), block_size, output);
         fseek(input, block_size * (-2), SEEK_CUR);
+        fwrite(buffer, sizeof(BYTE), block_size, output);
     }
 
     fclose(input);
