@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
     // TODO #3
     WAVHEADER input_header;
     fread(&input_header, sizeof(WAVHEADER), 1, input);
-    //long input_position = ftell(input);
 
     // Use check_format to ensure WAV format
     // TODO #4
@@ -61,21 +60,18 @@ int main(int argc, char *argv[])
 
     // Write reversed audio to file
     // TODO #8
-    /*BYTE buffer[block_size];
+    long input_position = ftell(input);
 
-    while (fread(buffer, sizeof(BYTE), block_size, input))
-    {
-        continue;
-    }
+    BYTE buffer[block_size];
 
-    fseek(input, block_size * (-1), ftell(input));
+    fseek(input, block_size * (-1), SEEK_END);
 
     while (ftell(input) != input_position)
     {
         fread(buffer, sizeof(BYTE), block_size, input);
-        fseek(input, block_size * (-2), ftell(input));
+        fseek(input, block_size * (-2), SEEK_CUR);
         fwrite(buffer, sizeof(BYTE), block_size, output);
-    }*/
+    }
 
     fclose(input);
     fclose(output);
