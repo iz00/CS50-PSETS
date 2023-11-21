@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     // Open input file for reading
     // TODO #2
-    FILE *input = fopen(argv[1], "r");
+    FILE *input = fopen(argv[1], "rb");
     if (input == NULL)
     {
         printf("Could not open file.\n");
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     // Open output file for writing
     // TODO #5
-    FILE *output = fopen(argv[2], "w");
+    FILE *output = fopen(argv[2], "wb");
     if (input == NULL)
     {
         printf("Could not open file.\n");
