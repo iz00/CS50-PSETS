@@ -8,7 +8,7 @@
 
 int check_format(WAVHEADER header);
 int get_block_size(WAVHEADER header);
-void write_reversed_audio(FILE *in, FILE *out, int size);
+void write_reversed_audio(FILE *in, FILE *out, int block);
 
 int main(int argc, char *argv[])
 {
@@ -54,9 +54,10 @@ int main(int argc, char *argv[])
     // Use get_block_size to calculate size of block
     int block_size = get_block_size(input_header);
 
-    // Write reversed audio to file
+    // Write reversed audio to output
     write_reversed_audio(input, output, block_size);
 
+    // Close files
     fclose(input);
     fclose(output);
 
@@ -85,18 +86,26 @@ int get_block_size(WAVHEADER header)
     return header.numChannels * (header.bitsPerSample / 8);
 }
 
-void write_reversed_audio(FILE *in, FILE *out, int size)
+// Write reversed audio from in to out files
+void write_reversed_audio(FILE *in, FILE *out, int block)
 {
+    // Get position of header of in, because it is already in out, and won't be reversed
     int header_position = ftell(in);
 
-    BYTE buffer[size];
+    // Buffer can hold amount of bytes in one block
+    BYTE buffer[block];
 
-    fseek(in, size * (-1), SEEK_END);
+    // Position on in file goes to its end, and returns 1 block
+    fseek(in, block * (-1), SEEK_END);
 
+    // Repeat while position on in file is greater than or equal to end of header
     while (ftell(in) >= header_position)
     {
-        fread(buffer, sizeof(BYTE), size, in);
-        fseek(in, size * (-2), SEEK_CUR);
-        fwrite(buffer, sizeof(BYTE), size, out);
+        // Read from in and write on out a block
+        fread(buffer, sizeof(BYTE), block, in);
+        fwrite(buffer, sizeof(BYTE), block, out);
+
+        // After read, position on in file advances one block, so to read the in file backwards, position returns 2 blocks
+        fseek(in, block * (-2), SEEK_CUR);
     }
 }
