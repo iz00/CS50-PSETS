@@ -14,7 +14,7 @@ const int BLOCK_SIZE = 512;
 
 int main(int argc, char *argv[])
 {
-    // Ensure proper usage (2 command-line arguments)
+    // Ensure proper usage (1 command-line argument)
     if (argc != 2)
     {
         printf("Usage: ./recover IMAGE\n");
