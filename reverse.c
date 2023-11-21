@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     // Write reversed audio to file
     // TODO #8
-    long input_position = ftell(input);
+    int input_position = ftell(input);
 
     BYTE buffer[block_size];
 
