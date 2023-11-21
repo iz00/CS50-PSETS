@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 // Images filenames length
 #define FILENAME_LENGTH 8
