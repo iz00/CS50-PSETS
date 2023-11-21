@@ -1,64 +1,81 @@
+// Recover JPEGs from a forensic image
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+// Images filenames length
 #define FILENAME_LENGTH 8
 
+// Type definition for BYTE
 typedef uint8_t BYTE;
 
+// There are 512 bytes in a block
 const int BLOCK_SIZE = 512;
 
 int main(int argc, char *argv[])
 {
-    // Ensure proper usage
+    // Ensure proper usage (2 command-line arguments)
     if (argc != 2)
     {
         printf("Usage: ./recover IMAGE\n");
         return 1;
     }
 
-    FILE *input = fopen(argv[1], "r");
+    // Open input file in read mode
+    FILE *input = fopen(argv[1], "rb");
     if (input == NULL)
     {
-        printf("Could not open file\n");
+        printf("Could not open file.\n");
         return 1;
     }
 
-    int files_counter = 0;
-    //int found_jpg = 0;
-
+    // Buffer can hold 512 bytes in stack
     BYTE buffer[BLOCK_SIZE];
-    char filename[FILENAME_LENGTH];
+
+    // Declaration of output file
     FILE *output = NULL;
 
+    // Memory in stack for filename
+    char filename[FILENAME_LENGTH];
+
+    int files_counter = 0;
+
+    // Read from input into buffer until there is bytes to read
     while (fread(buffer, sizeof(BYTE), BLOCK_SIZE, input))
     {
+        // If found signature for beggining of JPEG in buffer
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
+            // If there was previous file found, close it
             if (files_counter)
             {
                 fclose(output);
             }
 
+            // Creation of filename, sequence of numbers with 3 digits starting from 0
             sprintf(filename, "%03i.jpg", files_counter);
 
-            output = fopen(filename, "w");
+            // Open output file in write mode, given a filename
+            output = fopen(filename, "wb");
             if (output == NULL)
             {
                 fclose(input);
-                printf("Could not open file\n");
+                printf("Could not open file.\n");
                 return 1;
             }
 
             files_counter++;
         }
 
+        // If there is a file open, write the buffer to it
         if (files_counter)
         {
             fwrite(buffer, sizeof(BYTE), BLOCK_SIZE, output);
         }
     }
 
+    // Close files
     fclose(input);
     fclose(output);
 
