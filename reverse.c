@@ -41,10 +41,10 @@ int main(int argc, char *argv[])
 
     // Open output file in write mode
     FILE *output = fopen(argv[2], "wb");
-    if (input == NULL)
+    if (output == NULL)
     {
         printf("Could not open file.\n");
-        fclose(input);
+        fclose(output);
         return 1;
     }
 
