@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     // TODO #3
     WAVHEADER input_header;
     fread(&input_header, sizeof(WAVHEADER), 1, input);
-    long input_position = ftell(input);
+    //long input_position = ftell(input);
 
     // Use check_format to ensure WAV format
     // TODO #4
