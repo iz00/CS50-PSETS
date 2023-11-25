@@ -17,7 +17,7 @@ typedef struct node
 } node;
 
 // Number of buckets in hash table
-const unsigned int N = 13800;
+const unsigned int N = 1125;
 
 // Hash table
 node *table[N];
@@ -81,8 +81,8 @@ unsigned int hash(const char *word)
         }
     }
 
-    // Enough hash numbers to 3 different letter combinations (25 * 24 * 23)
-    return sum % 13800;
+    // Enough hash numbers to all possibilites of sum: 25 (z value) * 45 (max word length)
+    return sum % 1125;
 }
 
 // Return true if word is in dictionary, else false
