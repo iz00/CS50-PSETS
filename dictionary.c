@@ -17,7 +17,7 @@ typedef struct node
 } node;
 
 // Number of buckets in hash table
-const unsigned int N = 676;
+const unsigned int N = 15625;
 
 // Hash table
 node *table[N];
@@ -70,20 +70,16 @@ unsigned int size(void)
 // Hash word to a number
 unsigned int hash(const char *word)
 {
-    // Consider 3 first letters of word (if aproppriate lenght) in a base 26 system
-
     int sum = 0;
-    switch (strlen(word))
+    for (int i = 0, len = strlen(word); i < len; i++)
     {
-        //case 3:
-           // sum += (toupper(word[2]) - 'A') * 26 * 26;
-        case 2:
-            sum += (toupper(word[1]) - 'A') * 26;
-        case 1:
-            sum += toupper(word[0]) - 'A';
+        if (isalpha(word[i]))
+        {
+            sum += toupper(word[i]) - 'A';
+        }
     }
 
-    return sum;
+    return sum % 15625;
 }
 
 // Return true if word is in dictionary, else false
