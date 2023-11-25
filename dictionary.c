@@ -52,11 +52,11 @@ unsigned int hash(const char *word)
     switch (strlen(word))
     {
         case 3:
-            sum += (toupper(word[0]) - 'A') * 26 * 26;
+            sum += (toupper(word[2]) - 'A') * 26 * 26;
         case 2:
             sum += (toupper(word[1]) - 'A') * 26;
         case 1:
-            sum += toupper(word[1]) - 'A';
+            sum += toupper(word[0]) - 'A';
     }
 
     return sum;
