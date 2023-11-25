@@ -23,7 +23,6 @@ const unsigned int N = 26;
 node *table[N];
 
 int words_amount = 0;
-bool loaded = false;
 
 // Returns true if word is in dictionary, else false
 bool check(const char *word)
@@ -84,24 +83,19 @@ bool load(const char *dictionary)
         words_amount++;
     }
 
-    loaded = true;
     return true;
 }
 
 // Returns number of words in dictionary if loaded, else 0 if not yet loaded
 unsigned int size(void)
 {
-
-    if (loaded)
-    {
         return words_amount;
-    }
-    return 0;
 }
 
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
 {
     // TODO
-    return false;
+
+    return true;
 }
