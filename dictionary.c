@@ -1,4 +1,4 @@
-// Implements a dictionary's functionality
+// Implement a dictionary's functionality
 
 #include <ctype.h>
 #include <stdbool.h>
@@ -9,28 +9,31 @@
 
 #include "dictionary.h"
 
-// Represents a node in a hash table
+// Represent a node in a hash table
 typedef struct node
 {
     char word[LENGTH + 1];
     struct node *next;
 } node;
 
-// TODO: Choose number of buckets in hash table
+// Number of buckets in hash table
 const unsigned int N = 26;
 
 // Hash table
 node *table[N];
 
+// Keep track of amount of words in dictionary
 int words_amount = 0;
 
-// Returns true if word is in dictionary, else false
+// Return true if word is in dictionary, else false
 bool check(const char *word)
 {
     int index = hash(word);
 
+    // Set pointer to beggining of linked list at corresponding index in table, then iterates over it
     for (node *ptr = table[index]; ptr != NULL; ptr = ptr->next)
     {
+        // If pointer points to node that contains word, case insensitive, word is in dictionary
         if (!strcasecmp(ptr->word, word))
         {
             return true;
@@ -56,10 +59,7 @@ bool load(const char *dictionary)
         return false;
     }
 
-    for (int i = 0; i < N; i++)
-    {
-        table[i] = NULL;
-    }
+
 
     char word[LENGTH + 1];
 
