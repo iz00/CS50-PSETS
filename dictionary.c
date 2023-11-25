@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 #include "dictionary.h"
 
@@ -16,15 +17,26 @@ typedef struct node
 } node;
 
 // TODO: Choose number of buckets in hash table
-const unsigned int N = 17576;
+const unsigned int N = 26;
 
 // Hash table
 node *table[N];
 
+int words_amount = 0;
+
 // Returns true if word is in dictionary, else false
 bool check(const char *word)
 {
-    // TODO
+    int index = hash(word);
+
+    for (node *ptr = table[index]; ptr != NULL; ptr = ptr->next)
+    {
+        if (!strcasecmp(ptr->word, word))
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -51,6 +63,7 @@ bool load(const char *dictionary)
         node *n = malloc(sizeof(node));
         if (n == NULL)
         {
+            fclose(dict);
             return false;
         }
 
@@ -61,6 +74,8 @@ bool load(const char *dictionary)
         n->next = table[index];
 
         table[index] = n;
+
+        words_amount++;
     }
 
     return true;
@@ -69,8 +84,7 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded, else 0 if not yet loaded
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    return words_amount;
 }
 
 // Unloads dictionary from memory, returning true if successful, else false
