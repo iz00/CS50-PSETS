@@ -83,6 +83,7 @@ bool load(const char *dictionary)
         words_amount++;
     }
 
+    fclose(dict);
     return true;
 }
 
