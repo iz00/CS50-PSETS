@@ -17,50 +17,13 @@ typedef struct node
 } node;
 
 // Number of buckets in hash table
-const unsigned int N = 17576;
+const unsigned int N = 676;
 
 // Hash table
 node *table[N];
 
 // Keep track of amount of words in dictionary
 int words_amount = 0;
-
-// Return true if word is in dictionary, else false
-bool check(const char *word)
-{
-    int index = hash(word);
-
-    // Set pointer to beggining of linked list at corresponding index in table, then iterates over it
-    for (node *ptr = table[index]; ptr != NULL; ptr = ptr->next)
-    {
-        // If pointer points to node that contains word (case insensitive), word is in dictionary
-        if (!strcasecmp(ptr->word, word))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-// Hash word to a number
-unsigned int hash(const char *word)
-{
-    // Consider 3 first letters of word (if aproppriate lenght) in a base 26 system
-
-    int sum = 0;
-    switch (strlen(word))
-    {
-        case 3:
-            sum += (toupper(word[2]) - 'A') * 26 * 26;
-        case 2:
-            sum += (toupper(word[1]) - 'A') * 26;
-        case 1:
-            sum += toupper(word[0]) - 'A';
-    }
-
-    return sum;
-}
 
 // Load dictionary into memory, returning true if successful, else false
 bool load(const char *dictionary)
@@ -74,7 +37,7 @@ bool load(const char *dictionary)
     char word[LENGTH + 1];
 
     // Read word by word in file, until no more words found
-    while (fscanf(dict, "%s", word) != EOF)
+    while (fscanf(dict, "%s", word) == 1)
     {
         // Allocate node for word and hash it
         node *n = malloc(sizeof(node));
@@ -102,6 +65,43 @@ bool load(const char *dictionary)
 unsigned int size(void)
 {
     return words_amount;
+}
+
+// Hash word to a number
+unsigned int hash(const char *word)
+{
+    // Consider 3 first letters of word (if aproppriate lenght) in a base 26 system
+
+    int sum = 0;
+    switch (strlen(word))
+    {
+        //case 3:
+           // sum += (toupper(word[2]) - 'A') * 26 * 26;
+        case 2:
+            sum += (toupper(word[1]) - 'A') * 26;
+        case 1:
+            sum += toupper(word[0]) - 'A';
+    }
+
+    return sum;
+}
+
+// Return true if word is in dictionary, else false
+bool check(const char *word)
+{
+    int index = hash(word);
+
+    // Set pointer to beggining of linked list at corresponding index in table, then iterate over it
+    for (node *ptr = table[index]; ptr != NULL; ptr = ptr->next)
+    {
+        // If pointer points to node that contains word (case insensitive), word is in dictionary
+        if (!strcasecmp(ptr->word, word))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // Unload dictionary from memory, returning true if successful, else false
