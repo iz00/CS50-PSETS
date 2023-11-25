@@ -46,8 +46,8 @@ bool check(const char *word)
 // Hash word to a number
 unsigned int hash(const char *word)
 {
-    // TODO: Improve this hash function
-    // return toupper(word[0]) - 'A';
+    // Consider 3 first letters of word (if aproppriate lenght) in a base 26 system
+
     int sum = 0;
     switch (strlen(word))
     {
@@ -60,7 +60,6 @@ unsigned int hash(const char *word)
     }
 
     return sum;
-    // return (toupper(word[0]) - 'A') * 26 * 26 + (toupper(word[1]) - 'A') * 26 + toupper(word[2]) - 'A';
 }
 
 // Load dictionary into memory, returning true if successful, else false
