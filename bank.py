@@ -1,8 +1,10 @@
-greeting = input("Greeting: ").strip().lower()
+greeting = input("Greeting: ").lstrip()
 
-if greeting[:5] == "hello":
+first_word = greeting[:5].lower()
+
+if first_word == "hello":
     print("$0")
-elif greeting[0] == "h":
+elif first_word[0] == "h":
     print("$20")
 else:
     print("$100")
