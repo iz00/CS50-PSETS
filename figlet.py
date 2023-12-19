@@ -2,34 +2,28 @@ from sys import argv, exit
 from pyfiglet import Figlet
 from random import choice
 
+figlet = Figlet()
 
-def main():
-    figlet = Figlet()
+# Get a list of fonts available to use
+fonts = figlet.getFonts()
 
-    fonts = figlet.getFonts()
+# If no command-line arguments, choose randomly a font
+if len(argv) == 1:
+    figlet.setFont(font=choice(fonts))
 
-    if not validate_cla(fonts):
-        print("Invalid usage")
-        exit(1)
+# If two command-line arguments, one to set the font, and other a valid font, set the font
+elif len(argv) == 3 and argv[1] in ["-f", "--font"] and argv[2] in fonts:
+    figlet.setFont(font=argv[2])
 
-    s = input("Input: ").strip()
+else:
+    print("Invalid usage")
+    exit(1)
 
-    if len(argv) == 1:
-        figlet.setFont(font=choice(fonts))
-    else:
-        figlet.setFont(font=argv[2])
+# Get input of string to output and output it in set font
+s = input("Input: ")
 
-    print("Output:")
+print("Output:")
 
-    print(figlet.renderText(s))
+print(figlet.renderText(s))
 
-
-def validate_cla(fonts_list):
-    if len(argv) == 1:
-        return 1
-    elif len(argv) == 3 and argv[1] in ["-f", "--font"] and argv[2] in fonts_list:
-        return 1
-    return 0
-
-
-main()
+exit(0)
