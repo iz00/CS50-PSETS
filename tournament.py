@@ -5,7 +5,7 @@ import sys
 import random
 
 # Number of simulations to run
-N = 10
+N = 1000
 
 
 def main():
@@ -15,19 +15,13 @@ def main():
 
     teams = []
     # Read teams into memory from file
-    try:
-        file = open(sys.argv[1])
-    except FileNotFoundError:
-        sys.exit("File not found")
-    else:
+    with open(sys.argv[1]) as file:
         file_reader = csv.DictReader(file)
 
         for team in file_reader:
             # Convert rating to int for it to be used in coming calculations
             team["rating"] = int(team["rating"])
             teams.append(team)
-
-        file.close()
 
     counts = {}
     # Simulate N tournaments and keep track of win counts
