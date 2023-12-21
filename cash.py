@@ -1,7 +1,7 @@
 from cs50 import get_float
 
 QUARTER, DIME, NICKEL, PENNY = 25, 10, 5, 1
-coins_list = [QUARTER, DIME, NICKEL, PENNY]
+coins_list = [QUARTER = 25, DIME = 10, NICKEL = 5, PENNY = 1]
 
 
 def main():
@@ -27,5 +27,6 @@ def calculate_coins(change):
         change %= coin
 
     return coins
+
 
 main()
