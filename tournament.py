@@ -30,14 +30,6 @@ def main():
 
         file.close()
 
-    '''    with open(sys.argv[1]) as file:
-        file_reader = csv.DictReader(file)
-
-        for team in file_reader:
-            # Convert rating to int for it to be used in coming calculations
-            team["rating"] = int(team["rating"])
-            teams.append(team)'''
-
     counts = {}
     # Simulate N tournaments and keep track of win counts
     for i in range(N):
