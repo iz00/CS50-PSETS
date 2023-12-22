@@ -18,13 +18,13 @@ def main():
 def calculate_luhn_sum(number):
     s = 0
 
-    # Slice number starting from second to last number, getting every other number
+    # Slice number starting from second to last digit, getting every other digit
     for digit in number[-2::-2]:
         # Double the digit and add its digits to s
         digit = int(digit) * 2
         s += digit // 10 + digit % 10
 
-    # Slice number starting from last number, getting every other number
+    # Slice number starting from last digit, getting every other digit
     for digit in number[::-2]:
         # Add the digit to s
         s += int(digit)
@@ -49,7 +49,7 @@ def validate_card_check_type(number, s):
     # It's a Visa card
     elif (card_digits == 13 or card_digits == 16) and number[0] == "4":
         return "VISA"
-    # If not check validation for brands, is invalid
+    # If didn't check validation for brands, it is invalid
     else:
         return "INVALID"
 
