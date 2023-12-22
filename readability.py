@@ -1,5 +1,6 @@
 # Calculate approximate grade level needed to comprehend some text, based in Coleman-Liau index
 
+
 def main():
     text = input("Text: ")
 
