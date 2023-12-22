@@ -9,11 +9,10 @@ def main():
         sys.exit("Usage: python dna.py data.csv sequence.txt")
 
     # TODO: Read database file into a variable
-    people = read_database(sys.argv[1])
+    people = read_people_database(sys.argv[1])
 
     # TODO: Read DNA sequence file into a variable
-    with open(sys.argv[2]) as file:
-        dna_sequence = file.read()
+    dna_sequence = read_dna_sequence(sys.argv[2])
 
     STRs = list(people[0].keys())
     STRs.pop(0)
@@ -36,7 +35,7 @@ def main():
             print(person["name"])
 
 
-def read_database(filename):
+def read_people_database(filename):
     people = []
     try:
         file = open(filename)
@@ -50,6 +49,18 @@ def read_database(filename):
 
         file.close()
         return people
+
+
+def read_dna_sequence(filename):
+    try:
+        file = open(filename)
+    except FileNotFoundError:
+        sys.exit("File not found")
+    else:
+        dna_sequence = file.read()
+        file.close()
+
+        return dna_sequence
 
 
 def longest_match(sequence, subsequence):
