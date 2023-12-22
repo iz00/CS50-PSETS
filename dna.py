@@ -14,8 +14,7 @@ def main():
     # TODO: Read DNA sequence file into a variable
     dna_sequence = read_dna_sequence(sys.argv[2])
 
-    STRs = list(people[0].keys())
-    STRs.pop(0)
+    STRs = list(people[0].keys())[1:]
 
     # TODO: Find longest match of each STR in DNA sequence
     STRs_count = {}
