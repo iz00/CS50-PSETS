@@ -32,7 +32,7 @@ def calculate_index(letters, words, sentences):
 
 def get_grade(n):
     if n < 1:
-        return "Before grade 1"
+        return "Before Gade 1"
 
     if n > 16:
         return "Grade 16+"
