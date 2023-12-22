@@ -21,7 +21,7 @@ def main():
             print("AMEX")
         elif len(card_number) == 16 and card_number[:2] in ["51", "52", "53", "54", "55"]:
             print("MASTERCARD")
-        elif (len(card_number) == 13 or len(card_number) == 15) and card_number[0] == "4":
+        elif (len(card_number) == 13 or len(card_number) == 16) and card_number[0] == "4":
             print("VISA")
         else:
             print("INVALID")
