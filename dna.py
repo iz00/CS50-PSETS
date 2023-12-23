@@ -1,26 +1,32 @@
+# Check a DNA database and a DNA sequence to determine to whom it belongs
+
 import csv
 import sys
 
 
 def main():
-
-    # TODO: Check for command-line usage
+    # Ensure correct usage (2 command-line arguments)
     if len(sys.argv) != 3:
         sys.exit("Usage: python dna.py data.csv sequence.txt")
 
-    # TODO: Read database file into a variable
+    # Read database file into a variable
     people = read_people_database(sys.argv[1])
 
-    # TODO: Read DNA sequence file into a variable
+    # Read DNA sequence file into a variable
     dna_sequence = read_dna_sequence(sys.argv[2])
 
-    # TODO: Find longest match of each STR in DNA sequence
-    STRs_count = get_dna_STRs(people, dna_sequence)
+    # Get a list with all the STRs each person in the database has
+    # Get a person's keys, but slice out the first, because that's the "name" key [1:]
+    STRs = list(people[0].keys())[1:]
 
-    # TODO: Check database for matching profiles
-    print(check_match(people, STRs_count))
+    # Find longest match of each STR in DNA sequence
+    STRs_count = get_dna_STRs(people, dna_sequence, STRs)
+
+    # Check database for matching profiles
+    print(check_match(people, STRs_count, STRs))
 
 
+# Read database of DNAs to a list, each element is a dict of a person's DNA
 def read_people_database(filename):
     people = []
     try:
@@ -34,9 +40,11 @@ def read_people_database(filename):
             people.append(person)
 
         file.close()
-        return people
+
+    return people
 
 
+# Read given person DNA sequence file into a string
 def read_dna_sequence(filename):
     try:
         file = open(filename)
@@ -46,20 +54,16 @@ def read_dna_sequence(filename):
         dna_sequence = file.read()
         file.close()
 
-        return dna_sequence
+    return dna_sequence
 
-
+# Return length of longest run of subsequence in sequence
 def longest_match(sequence, subsequence):
-    """Returns length of longest run of subsequence in sequence."""
-
-    # Initialize variables
     longest_run = 0
     subsequence_length = len(subsequence)
     sequence_length = len(sequence)
 
     # Check each character in sequence for most consecutive runs of subsequence
     for i in range(sequence_length):
-
         # Initialize count of consecutive runs
         count = 0
 
@@ -67,7 +71,6 @@ def longest_match(sequence, subsequence):
         # If a match, move substring to next potential match in sequence
         # Continue moving substring and checking for matches until out of consecutive matches
         while True:
-
             # Adjust substring start and end
             start = i + count * subsequence_length
             end = start + subsequence_length
@@ -87,21 +90,21 @@ def longest_match(sequence, subsequence):
     return longest_run
 
 
-def get_dna_STRs(people, dna_sequence):
-    STRs = list(people[0].keys())[1:]
-
+# Get a dict with the STRs count the given DNA has
+def get_dna_STRs(people, dna_sequence, STRs):
     STRs_count = {}
+    # For each STR, check for longest match in given DNA sequence
     for STR in STRs:
         STRs_count[STR] = str(longest_match(dna_sequence, STR))
 
     return STRs_count
 
 
-def check_match(people, STRs_count):
+# Check database for matching profiles with STRs count of DNA sequence
+def check_match(people, STRs_count, STRs):
     for person in people:
-        person_STRs = list(person.keys())[1:]
         match = True
-        for STR in person_STRs:
+        for STR in STRs:
             if STRs_count[STR] != person[STR]:
                 match = False
                 break
