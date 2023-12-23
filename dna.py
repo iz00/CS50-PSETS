@@ -18,15 +18,7 @@ def main():
     STRs_count = get_dna_STRs(people, dna_sequence)
 
     # TODO: Check database for matching profiles
-    for person in people:
-        person_STRs = list(person.keys())[1:]
-        match = True
-        for STR in person_STRs:
-            if STRs_count[STR] != person[STR]:
-                match = False
-                break
-        if match:
-            print(person["name"])
+    print(check_match(people, STRs_count))
 
 
 def read_people_database(filename):
@@ -103,6 +95,19 @@ def get_dna_STRs(people, dna_sequence):
         STRs_count[STR] = str(longest_match(dna_sequence, STR))
 
     return STRs_count
+
+
+def check_match(people, STRs_count):
+    for person in people:
+        person_STRs = list(person.keys())[1:]
+        match = True
+        for STR in person_STRs:
+            if STRs_count[STR] != person[STR]:
+                match = False
+                break
+        if match:
+            return person["name"]
+    return "No match"
 
 
 main()
