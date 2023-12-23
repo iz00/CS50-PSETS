@@ -16,7 +16,7 @@ def main():
     dna_sequence = read_dna_sequence(sys.argv[2])
 
     # Get a list with all the STRs each person in the database has
-    # Get a person's keys, but slice out the first, because that's the "name" key [1:]
+    # Get a person's keys, but slice out the first, because that's the "name" key
     STRs = list(people[0].keys())[1:]
 
     # Find longest match of each STR in DNA sequence
@@ -55,6 +55,7 @@ def read_dna_sequence(filename):
         file.close()
 
     return dna_sequence
+
 
 # Return length of longest run of subsequence in sequence
 def longest_match(sequence, subsequence):
@@ -105,11 +106,15 @@ def check_match(people, STRs_count, STRs):
     for person in people:
         match = True
         for STR in STRs:
+            # If even one STR is different, no match, update match flag and go to next person
             if STRs_count[STR] != person[STR]:
                 match = False
                 break
+        # If no STRs are different, match flag will still be True
         if match:
             return person["name"]
+
+    # If all people were analysed, and none resulted in a match
     return "No match"
 
 
