@@ -1,3 +1,4 @@
+-- Show the names of all people who directed a movie with a rating of at least 9
 SELECT DISTINCT(name) AS name
   FROM people
   JOIN directors

@@ -1,3 +1,4 @@
+-- Show the titles of all movies that both Bradley Cooper and Jennifer Lawrence starred in
 SELECT title
   FROM movies
   JOIN stars

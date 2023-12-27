@@ -1,3 +1,4 @@
+-- Show the titles of the 5 highest ranking movies that Chadwick Boseman starred in
 SELECT title
   FROM people, stars, movies, ratings
  WHERE people.id = stars.person_id
