@@ -1,4 +1,4 @@
-SELECT DISTINCT(name) as name
+SELECT DISTINCT(name) AS name
   FROM people
   JOIN directors
     ON people.id = directors.person_id
