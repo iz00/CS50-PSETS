@@ -54,7 +54,7 @@ Accurate interviews:
 -- Since the license plates seem useful, select them, knowing all the other informations
 SELECT license_plate
   FROM bakery_security_logs
- WHERE minute BETWEEN 5 and 25  -- Sometime within ten minutes of the theft, that happened at 10h15am
+ WHERE minute BETWEEN 5 AND 25  -- Sometime within ten minutes of the theft, that happened at 10h15am
    AND hour = 10
    AND day = 28
    AND month = 7
