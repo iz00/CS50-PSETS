@@ -24,6 +24,12 @@ CREATE TABLE transactions (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE sqlite_sequence(name, seq);
-
 CREATE UNIQUE INDEX username ON users (username);
+
+CREATE INDEX symbol ON stocks (symbol);
+
+UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='users';
+
+UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='stocks';
+
+UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='transactions';

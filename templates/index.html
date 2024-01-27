@@ -1,3 +1,5 @@
+<!-- Page to show the user's portfolio -->
+
 {% extends "layout.html" %}
 
 {% block title %}
@@ -12,6 +14,7 @@
                 <th class="text-end">Shares</th>
                 <th class="text-end">Price</th>
                 <th class="text-end">TOTAL</th>
+                <th class="text-end">Operations</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +24,14 @@
                     <td class="text-end">{{ stock.shares }}</td>
                     <td class="text-end">{{ stock.price | usd }}</td>
                     <td class="text-end">{{ stock.total_price | usd }}</td>
+                    <td class="text-end">
+                        <form action="/" method="post">
+                            <input hidden name="symbol" value="{{ stock.symbol }}">
+                            <input class="form-control mx-auto w-auto" min="1" name="shares" placeholder="Shares" type="number">
+                            <button class="btn btn-primary" formaction="buy" type="submit">Buy</button>
+                            <button class="btn btn-primary" formaction="sell" type="submit">Sell</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -28,10 +39,12 @@
             <tr>
                 <td class="border-0 fw-bold text-end" colspan="3">Cash</td>
                 <td class="border-0 text-end">{{ cash | usd }}</td>
+                <td class="border-0"></td>
             </tr>
             <tr>
                 <td class="border-0 fw-bold text-end" colspan="3">TOTAL</td>
                 <td class="border-0 w-bold text-end">{{ total_cash | usd }}</td>
+                <td class="border-0"></td>
             </tr>
         </tfoot>
     </table>

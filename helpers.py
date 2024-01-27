@@ -11,12 +11,11 @@ from functools import wraps
 
 # Render message as an apology to user
 def apology(message, code=400):
-
-    """
-    Escape special characters.
-    https://github.com/jacebrowning/memegen#special-characters
-    """
     def escape(s):
+        """
+        Escape special characters.
+        https://github.com/jacebrowning/memegen#special-characters
+        """
 
         for old, new in [
             ("-", "--"),
@@ -33,11 +32,12 @@ def apology(message, code=400):
 
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
-"""
-Decorate routes to require login.
-https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
-"""
+
 def login_required(f):
+    """
+    Decorate routes to require login.
+    https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
+    """
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -50,7 +50,6 @@ def login_required(f):
 
 # Look up quote for symbol
 def lookup(symbol):
-
     # Prepare API request
     symbol = symbol.upper()
     end = datetime.datetime.now(pytz.timezone("US/Eastern"))
