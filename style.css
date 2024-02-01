@@ -1,0 +1,9 @@
+#red-title {
+    color: red;
+    font-size: larger;
+    margin-left: 40px;
+}
+
+.container {
+    margin: 40px;
+}
