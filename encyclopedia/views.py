@@ -49,3 +49,26 @@ def search(request):
     return render(request, "encyclopedia/error.html", {
         "message": "no matching entries"
     })
+
+def create(request):
+    if request.method == "GET":
+        return render(request, "encyclopedia/create.html")
+
+    entries = util.list_entries()
+    entries_capitalized = [entry.upper() for entry in entries]
+    title = request.POST.get("title")
+
+    if not title or title.upper() in entries_capitalized:
+        return render(request, "encyclopedia/error.html", {
+            "message": "invalid title"
+        })
+
+    content = request.POST.get("content")
+
+    if not content:
+        return render(request, "encyclopedia/error.html", {
+            "message": "invalid content"
+        })
+
+    util.save_entry(title, content)
+    return HttpResponseRedirect(reverse("entry", kwargs={"title": title.upper()}))

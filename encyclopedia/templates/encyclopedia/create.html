@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create
+{% endblock %}
+
+{% block body %}
+    <h1>Create Encyclopedia</h1>
+
+    <form action="{% url 'create' %}" method="post">
+        <input autocomplete="off" autofocus type="text" name="title" placeholder="Title">
+        <textarea autocomplete="off" cols="50" name="content" placeholder="Content" rows="4"></textarea>
+        {% csrf_token %}
+        <button type="submit">Create Encyclopedia</button>
+    </form>
+{% endblock %}
