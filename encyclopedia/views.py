@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from random import choice
 
 from . import util
 
@@ -95,3 +96,6 @@ def edit(request, title):
 
     util.save_entry(title, new_content)
     return HttpResponseRedirect(reverse("entry", kwargs={"title": title.upper()}))
+
+def random(request):
+    return HttpResponseRedirect(reverse("entry", kwargs={"title": choice(util.list_entries()).upper()}))
