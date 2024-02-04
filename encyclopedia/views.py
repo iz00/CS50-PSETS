@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from markdown2 import Markdown
 from random import choice
 
 from . import util
@@ -22,10 +23,12 @@ def entry(request, title):
         })
     
     title = entries[entries_capitalized.index(title)]
+    markdowner = Markdown()
+    content = markdowner.convert(util.get_entry(title))
 
     return render(request, "encyclopedia/entry.html", {
         "title": title,
-        "content": util.get_entry(title)
+        "content": content
     })
 
 def search(request):
