@@ -12,6 +12,7 @@ def index(request):
         "entries": util.list_entries()
     })
 
+
 def entry(request, title):
     entries = util.list_entries()
     entries_capitalized = [entry.upper() for entry in entries]
@@ -31,6 +32,7 @@ def entry(request, title):
         "content": content
     })
 
+
 def search(request):
     query = request.GET.get('q').upper()
     entries = util.list_entries()
@@ -45,14 +47,10 @@ def search(request):
         if query in entry:
             matches.append(entries[entries_capitalized.index(entry)])
 
-    if matches:
-        return render(request, "encyclopedia/search.html", {
-            "entries": matches
-        })
-
-    return render(request, "encyclopedia/error.html", {
-        "message": "no matching entries"
+    return render(request, "encyclopedia/search.html", {
+        "entries": matches
     })
+
 
 def create(request):
     if request.method == "GET":
@@ -75,34 +73,38 @@ def create(request):
         })
 
     util.save_entry(title, content)
-    return HttpResponseRedirect(reverse("entry", kwargs={"title": title.upper()}))
+    return HttpResponseRedirect(reverse("entry", kwargs={"title": title}))
+
 
 def edit(request, title):
 
     if request.method == "GET":
         entries = util.list_entries()
         entries_capitalized = [entry.upper() for entry in entries]
-        if title.upper() not in entries_capitalized:
+        title = title.upper()
+
+        if title not in entries_capitalized:
             return render(request, "encyclopedia/error.html", {
                 "message": "invalid entry"
             })
-    
-        title = entries[entries_capitalized.index(title.upper())]
+
+        title = entries[entries_capitalized.index(title)]
 
         return render(request, "encyclopedia/edit.html", {
             "title": title,
             "content": util.get_entry(title)
         })
 
-    new_content = request.POST.get("content")
+    content = request.POST.get("content")
 
-    if not new_content:
+    if not content:
         return render(request, "encyclopedia/error.html", {
             "message": "invalid content"
         })
 
-    util.save_entry(title, new_content)
-    return HttpResponseRedirect(reverse("entry", kwargs={"title": title.upper()}))
+    util.save_entry(title, content)
+    return HttpResponseRedirect(reverse("entry", kwargs={"title": title}))
+
 
 def random(request):
-    return HttpResponseRedirect(reverse("entry", kwargs={"title": choice(util.list_entries()).upper()}))
+    return HttpResponseRedirect(reverse("entry", kwargs={"title": choice(util.list_entries())}))
