@@ -72,3 +72,26 @@ def create(request):
 
     util.save_entry(title, content)
     return HttpResponseRedirect(reverse("entry", kwargs={"title": title.upper()}))
+
+def edit(request, title):
+
+    if request.method == "GET":
+        if title not in util.list_entries():
+            return render(request, "encyclopedia/error.html", {
+                "message": "invalid entry"
+            })
+
+        return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "content": util.get_entry(title)
+        })
+
+    new_content = request.POST.get("content")
+
+    if not new_content:
+        return render(request, "encyclopedia/error.html", {
+            "message": "invalid content"
+        })
+
+    util.save_entry(title, new_content)
+    return HttpResponseRedirect(reverse("entry", kwargs={"title": title.upper()}))
