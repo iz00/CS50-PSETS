@@ -76,10 +76,14 @@ def create(request):
 def edit(request, title):
 
     if request.method == "GET":
-        if title not in util.list_entries():
+        entries = util.list_entries()
+        entries_capitalized = [entry.upper() for entry in entries]
+        if title.upper() not in entries_capitalized:
             return render(request, "encyclopedia/error.html", {
                 "message": "invalid entry"
             })
+    
+        title = entries[entries_capitalized.index(title.upper())]
 
         return render(request, "encyclopedia/edit.html", {
             "title": title,
