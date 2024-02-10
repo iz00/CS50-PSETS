@@ -1,12 +1,26 @@
+from decimal import Decimal
 from django import forms
+from django.forms import ModelForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from .models import *
+
+
+class CreateListingForm(ModelForm):
+    starting_bid = forms.DecimalField(decimal_places=2, label="Starting bid", label_suffix=": $", max_digits=64, min_value=Decimal("0.01"), step_size=0.01, widget=forms.NumberInput(attrs={"placeholder": "000.00"}))
+    class Meta:
+        model = Listing
+        fields = ["title", "description", "starting_bid", "image", "category"]
+        widgets = {
+            "description": forms.Textarea(attrs={"autocomplete":"off", "cols": 80, "placeholder": "Enter the listing's description here.", "rows": 5}),
+            "image": forms.TextInput(attrs={"autocomplete":"off", "placeholder": "https://example.com"}),
+            "title": forms.TextInput(attrs={"autocomplete":"off", "placeholder": "Enter the listing's title here."})
+        }
 
 
 def index(request):
@@ -16,7 +30,28 @@ def index(request):
 @login_required
 def create(request):
     if request.method == "GET":
-        return render(request, "auctions/create.html")
+        return render(request, "auctions/create.html", {
+            "form": CreateListingForm()
+        })
+
+    form = CreateListingForm(request.POST)
+
+    if not form.is_valid():
+        return render(request, "auctions/create.html", {
+            "form": form
+        })
+
+    Listing(
+        category=form.cleaned_data["category"],
+        description=form.cleaned_data["description"].capitalize(),
+        image=form.cleaned_data["image"],
+        starting_bid=Decimal(form.cleaned_data["starting_bid"]),
+        status="open",
+        title=form.cleaned_data["title"].title(),
+        lister=User.objects.get(pk=request.user.id)
+    ).save()
+
+    return HttpResponseRedirect(reverse("index"))
 
 
 def login_view(request):
