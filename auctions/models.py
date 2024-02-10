@@ -4,8 +4,8 @@ from django.db import models
 
 class Bid(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    listing = models.ForeignKey("Listing", on_delete=models.CASCADE, related_name="listing_bids")
     bidder = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_bids")
+    listing = models.ForeignKey("Listing", on_delete=models.CASCADE, related_name="listing_bids")
 
 
     def __str__(self):
@@ -14,8 +14,8 @@ class Bid(models.Model):
 
 class Comment(models.Model):
     content = models.TextField(max_length=256)
-    listing = models.ForeignKey("Listing", on_delete=models.CASCADE, related_name="listing_comments")
     commenter = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_comments")
+    listing = models.ForeignKey("Listing", on_delete=models.CASCADE, related_name="listing_comments")
 
 
     def __str__(self):
@@ -42,17 +42,17 @@ class Listing(models.Model):
     ]
 
     STATUS = {
+        "closed": "Closed",
         "open": "Open",
-        "closed": "Closed"
     }
 
-    title = models.CharField(max_length=64, unique=True)
-    description = models.TextField(max_length=256)
     category = models.CharField(blank=True, choices=CATEGORIES, default="", max_length=64)
-    image = models.URLField(blank=True)
-    starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
-    time = models.DateTimeField(auto_now=True)
+    description = models.TextField(max_length=256)
+    image = models.URLField(blank=True, help_text="(optional)", verbose_name="Image URL")
+    starting_bid = models.DecimalField(max_digits=64, decimal_places=2)
     status = models.CharField(blank=False, choices=STATUS, default="open", max_length=8)
+    time = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=64, unique=True)
     lister = models.ForeignKey("User", on_delete=models.CASCADE, related_name="listings")
 
 
