@@ -1,19 +1,29 @@
+from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import *
 
 
 def index(request):
     return render(request, "auctions/index.html")
 
 
+@login_required
+def create(request):
+    if request.method == "GET":
+        return render(request, "auctions/create.html")
+
+
 def login_view(request):
     if request.method == "GET":
-        return render(request, "auctions/login.html")
+        return render(request, "auctions/login.html", {
+            "next_page": f"{request.GET.get('next', '')}"
+        })
 
     # Attempt to sign user in
     username = request.POST["username"]
@@ -23,6 +33,12 @@ def login_view(request):
     # Check if authentication successful
     if user:
         login(request, user)
+
+        next_page = request.POST["next_page"]
+
+        if next_page:
+            return HttpResponseRedirect(f"{next_page}")
+
         return HttpResponseRedirect(reverse("index"))
 
     return render(request, "auctions/login.html", {
