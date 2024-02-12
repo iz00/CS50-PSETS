@@ -3,13 +3,13 @@
 {% block body %}
     <h2>Active Listings</h2>
     
-    {% for listing in listings %}
+    {% for listing, price in listings %}
         <div>
             {% if listing.image %}
                 <img alt="{{ listing.title }} image" src="{{ listing.image }}" style="height: 10%; width: 10%;">
             {% endif %}
-            <h4>{{ listing.title }}</h4>
-            <p><strong>Price</strong>: ${{ listing.starting_bid }}</p>
+            <h4><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h4>
+            <p><strong>Price</strong>: ${{ price }}</p>
             <p>{{ listing.description }}</p>
             <p>Created {{ listing.time }}</p>
         </div>

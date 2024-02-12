@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Bid(models.Model):
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=64, decimal_places=2)
     bidder = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_bids")
     listing = models.ForeignKey("Listing", on_delete=models.CASCADE, related_name="listing_bids")
 

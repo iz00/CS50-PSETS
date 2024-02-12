@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ModelForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,19 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import *
+
+
+class BidForm(forms.Form):
+    price = forms.DecimalField(decimal_places=2, label="Bid", label_suffix=": $", max_digits=64, min_value=Decimal("0.01"), step_size=0.01, widget=forms.NumberInput(attrs={"placeholder": "000.00"}))
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content"]
+        widgets = {
+            "content": forms.Textarea(attrs={"autocomplete":"off", "cols": 80, "placeholder": "Enter your comment here.", "rows": 5}),
+        }
 
 
 class CreateListingForm(ModelForm):
@@ -24,9 +38,74 @@ class CreateListingForm(ModelForm):
 
 
 def index(request):
+    listings = Listing.objects.filter(status="open").all().order_by("-time")
+
+    listings_prices = []
+
+    for listing in listings:
+
+        bid = Bid.objects.filter(listing=listing).order_by("-price").first()
+
+        if bid:
+            listings_prices.append(bid.price)
+        else:
+            listings_prices.append(listing.starting_bid)
+
+    listings = zip(listings, listings_prices)
+
     return render(request, "auctions/index.html", {
-        "listings": Listing.objects.all().order_by("-time")
+        "listings": listings
     })
+
+
+@login_required
+def bid(request):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=int(request.POST.get("listing")))
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse("index"))
+
+        form = BidForm(request.POST)
+
+        if not form.is_valid():
+            return HttpResponseRedirect(reverse("index"))
+
+        bids = Bid.objects.filter(listing=listing).order_by("-price").all()
+
+        bid = form.cleaned_data["price"]
+
+        if bids:
+            if bid <= bids.first().price:
+                return HttpResponseRedirect(reverse("index"))
+        else:
+            if bid < listing.starting_bid:
+                return HttpResponseRedirect(reverse("index"))
+
+        Bid(price=bid, bidder=User.objects.get(pk=request.user.id), listing=listing).save()
+
+        return HttpResponseRedirect(reverse("listing", args=[listing.id]))
+
+@login_required
+def comment(request):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=int(request.POST.get("listing")))
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse("index"))
+    
+        form = CommentForm(request.POST)
+
+        if not form.is_valid():
+            return HttpResponseRedirect(reverse("index"))
+
+        Comment(
+            content=form.cleaned_data["content"],
+            commenter=User.objects.get(pk=request.user.id),
+            listing = listing
+        ).save()
+
+        return HttpResponseRedirect(reverse("index"))
 
 
 @login_required
@@ -54,6 +133,24 @@ def create(request):
     ).save()
 
     return HttpResponseRedirect(reverse("index"))
+
+
+def listing(request, listing_id):
+    try:
+        listing = Listing.objects.get(pk=listing_id)
+    except ObjectDoesNotExist:
+        listing = watchlist = None
+    else:
+        watchlist = User.objects.filter(pk=request.user.id).first() in listing.users_watchlisted.all()
+
+    return render(request, "auctions/listing.html", {
+        "bids": Bid.objects.filter(listing=listing).all().order_by("-price"),
+        "comments": Comment.objects.filter(listing=listing).all(),
+        "bid_form": BidForm(),
+        "comment_form": CommentForm(),
+        "listing": listing,
+        "watchlist": watchlist
+    })
 
 
 def login_view(request):
@@ -113,4 +210,27 @@ def register(request):
         })
 
     login(request, user)
+    return HttpResponseRedirect(reverse("index"))
+
+
+@login_required
+def watchlist(request):
+    if request.method == "GET":
+        pass
+
+    user = User.objects.get(pk=request.user.id)
+    listing = Listing.objects.get(pk=int(request.POST.get("listing")))
+
+    if not listing:
+        return HttpResponseRedirect(reverse("index"))
+    
+    print(user.watchlist)
+
+    if listing in user.watchlist.all():
+        user.watchlist.remove(listing)
+    else:
+        user.watchlist.add(listing)
+    
+    user.save()
+
     return HttpResponseRedirect(reverse("index"))
