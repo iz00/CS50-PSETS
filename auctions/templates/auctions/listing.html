@@ -19,7 +19,11 @@
         {% endif %}
 
         {% if listing.lister == request.user and listing.status == "open" %}
-            <p>Click me to close the listing.</p>
+            <form action="{% url 'close' %}" method="post">
+                {% csrf_token %}
+                <input name="listing" type="hidden" value="{{ listing.id }}">
+                <button type="submit">Close the listing</button>
+            </form>
         {% endif %}
 
         {% if listing.image %}

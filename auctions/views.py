@@ -86,6 +86,48 @@ def bid(request):
 
         return HttpResponseRedirect(reverse("listing", args=[listing.id]))
 
+
+def categories(request):
+    if request.method == "GET":
+        if not request.GET.get("cat"):
+            return render(request, "auctions/categories.html", {
+                "categories": Listing.CATEGORIES[1:],
+                "listings": None
+            })
+
+        listings = Listing.objects.filter(category=request.GET.get("cat"), status="open").all().order_by("-time")
+
+        listings_prices = []
+
+        for listing in listings:
+
+            bid = Bid.objects.filter(listing=listing).order_by("-price").first()
+
+            if bid:
+                listings_prices.append(bid.price)
+            else:
+                listings_prices.append(listing.starting_bid)
+
+        listings = zip(listings, listings_prices)
+
+        return render(request, "auctions/categories.html", {
+            "categories": None,
+            "listings": listings
+        })
+
+@login_required
+def close(request):
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=int(request.POST.get("listing")))
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse("index"))
+
+        Listing.objects.filter(pk=int(request.POST.get("listing"))).update(status="closed")
+
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+
 @login_required
 def comment(request):
     if request.method == "POST":
@@ -216,21 +258,37 @@ def register(request):
 @login_required
 def watchlist(request):
     if request.method == "GET":
-        pass
+
+        listings = User.objects.get(pk=request.user.id).watchlist.all()
+
+        listings_prices = []
+
+        for listing in listings:
+
+            bid = Bid.objects.filter(listing=listing).order_by("-price").first()
+
+            if bid:
+                listings_prices.append(bid.price)
+            else:
+                listings_prices.append(listing.starting_bid)
+
+        listings = zip(listings, listings_prices)
+
+        return render(request, "auctions/watchlist.html", {
+            "listings": listings
+        })
 
     user = User.objects.get(pk=request.user.id)
     listing = Listing.objects.get(pk=int(request.POST.get("listing")))
 
     if not listing:
         return HttpResponseRedirect(reverse("index"))
-    
-    print(user.watchlist)
 
     if listing in user.watchlist.all():
         user.watchlist.remove(listing)
     else:
         user.watchlist.add(listing)
-    
+
     user.save()
 
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("watchlist"))
