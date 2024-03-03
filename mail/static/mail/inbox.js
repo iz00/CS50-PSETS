@@ -28,6 +28,29 @@ function compose_email() {
 
 function load_mailbox(mailbox) {
 
+    fetch(`/emails/${mailbox}`)
+    .then(response => response.json())
+    .then(emails => {
+        console.log(emails);
+
+        if (emails.length === 0) {
+            const heading = document.createElement('p');
+            heading.innerHTML = 'No emails yet.';
+            document.querySelector('#emails-view').append(heading);
+            return;
+        }
+        if ('error' in emails) { return; }
+
+        emails.forEach((email) => {
+            const email_box = document.createElement('div');
+            subject = (email.subject) ? email.subject : '(no subject)';
+            email_box.innerHTML = `<strong>${email.sender}</strong> ${subject} ${email.timestamp}`;
+            email_box.classList.add("email");
+            (email.read) ? email_box.classList.add('read') : email_box.classList.add('unread');
+            document.querySelector('#emails-view').append(email_box);
+        });
+    });
+
     // Show the mailbox and hide other views
     document.querySelector('#emails-view').style.display = 'block';
     document.querySelector('#compose-view').style.display = 'none';
