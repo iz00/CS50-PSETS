@@ -18,6 +18,7 @@ function compose_email() {
 
     // Show compose view and hide other views
     document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#email-view').style.display = 'none';
     document.querySelector('#compose-view').style.display = 'block';
 
     // Clear out composition fields
@@ -41,18 +42,21 @@ function load_mailbox(mailbox) {
         }
         if ('error' in emails) { return; }
 
-        emails.forEach((email) => {
+        emails.forEach(email => {
             const email_box = document.createElement('div');
             subject = (email.subject) ? email.subject : '(no subject)';
             email_box.innerHTML = `<strong>${email.sender}</strong> ${subject} ${email.timestamp}`;
             email_box.classList.add("email");
             (email.read) ? email_box.classList.add('read') : email_box.classList.add('unread');
             document.querySelector('#emails-view').append(email_box);
+
+            email_box.addEventListener('click', () => view_email(email.id));
         });
     });
 
     // Show the mailbox and hide other views
     document.querySelector('#emails-view').style.display = 'block';
+    document.querySelector('#email-view').style.display = 'none';
     document.querySelector('#compose-view').style.display = 'none';
 
     // Show the mailbox name
@@ -83,4 +87,29 @@ function send_email(event) {
         }
     });
     event.preventDefault();
+}
+
+function view_email(email_id) {
+
+    fetch(`/emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            read: true
+        })
+    })
+
+    let email_block = document.querySelector('#email-view');
+
+    fetch(`/emails/${email_id}`)
+    .then(response => response.json())
+    .then(email => {
+        // Print email
+        console.log(email);
+        email_block.innerHTML = `<p><strong>From: </strong>${email.sender}</p><p><strong>To: </strong>${email.recipients}</p><p><strong>Subject: </strong>${email.subject}</p><p><strong>Timestamp: </strong>${email.timestamp}</p><p>${email.body}</p>`;
+    });
+
+    // Show the email and hide other views
+    email_block.style.display = 'block';
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'none';
 }

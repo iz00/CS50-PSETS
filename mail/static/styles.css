@@ -16,3 +16,7 @@ textarea {
 .unread {
     background-color: lightgray;
 }
+
+#email-view {
+    display: none;
+}
