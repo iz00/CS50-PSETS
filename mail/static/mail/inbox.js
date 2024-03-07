@@ -81,6 +81,21 @@ function load_mailbox(mailbox) {
     document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 
+function reply_email(recipient, subject, body) {
+
+    document.querySelector('#compose-error').style.display = 'none';
+
+    // Show compose view and hide other views
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#email-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'block';
+
+    // Clear out composition fields
+    document.querySelector('#compose-recipients').value = recipient;
+    document.querySelector('#compose-subject').value = subject;
+    document.querySelector('#compose-body').value = body;
+}
+
 function send_email(event) {
 
     const error_message = document.querySelector('#compose-error');
@@ -111,15 +126,21 @@ function view_email(email_id) {
 
     let email_block = document.querySelector('#email-view');
 
-    // Show the email and hide other views
-    email_block.style.display = 'block';
-    document.querySelector('#emails-view').style.display = 'none';
-    document.querySelector('#compose-view').style.display = 'none';
-
     fetch(`/emails/${email_id}`)
     .then(response => response.json())
     .then(email => {
         email_block.innerHTML = `<p><strong>From: </strong>${email.sender}</p><p><strong>To: </strong>${email.recipients}</p><p><strong>Subject: </strong>${email.subject}</p><p><strong>Timestamp: </strong>${email.timestamp}</p><p>${email.body}</p>`;
+
+        const button = document.createElement('button');
+        button.classList.add('btn', 'btn-sm', 'btn-outline-primary');
+        button.innerHTML = 'Reply';
+        email_block.append(button);
+
+        button.addEventListener('click', () => reply_email(
+            email.sender, 
+            (email.subject.startsWith('Re: ')) ? email.subject : `Re: ${email.subject}`,
+            `On ${email.timestamp} ${email.sender} wrote: ${email.body}`
+        ));
 
         if (!email.read) {
             fetch(`/emails/${email_id}`, {
@@ -127,7 +148,7 @@ function view_email(email_id) {
                 body: JSON.stringify({
                     read: true
                 })
-            })
+            });
         }
 
         if (email.archived) {
@@ -145,4 +166,9 @@ function view_email(email_id) {
             });
         }
     });
+
+    // Show the email and hide other views
+    email_block.style.display = 'block';
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'none';
 }

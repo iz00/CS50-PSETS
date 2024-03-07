@@ -10,11 +10,11 @@ textarea {
 }
 
 .read {
-    background-color: white;
+    background-color: lightgray;
 }
 
 .unread {
-    background-color: lightgray;
+    background-color: white;
 }
 
 #email-view {
