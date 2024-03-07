@@ -115,9 +115,10 @@ def email(request, email_id):
     elif request.method == "PUT":
         data = loads(request.body)
 
-        if data.get("read"):
+        if data.get("read") is not None:
             email.read = data["read"]
-        if data.get("archived"):
+        if data.get("archived") is not None:
+            print(f'O status agora é: {data["archived"]}')
             email.archived = data["archived"]
 
         email.save()

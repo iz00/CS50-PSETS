@@ -12,6 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
     load_mailbox('inbox');
 });
 
+function archive(email, block, location) {
+
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-sm', 'btn-outline-primary');
+    button.innerHTML = (location === 'inbox') ? 'Archive' : 'Unarchive';
+    block.append(button);
+
+    button.addEventListener('click', () => {
+        fetch(`emails/${email.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                archived: !email.archived
+            })
+        })
+        .then(() => load_mailbox('inbox'));
+    });
+}
+
 function compose_email() {
 
     document.querySelector('#compose-error').style.display = 'none';
@@ -46,7 +64,7 @@ function load_mailbox(mailbox) {
             const email_box = document.createElement('div');
             subject = (email.subject) ? email.subject : '(no subject)';
             email_box.innerHTML = `<strong>${email.sender}</strong> ${subject} ${email.timestamp}`;
-            email_box.classList.add("email");
+            email_box.classList.add('email');
             (email.read) ? email_box.classList.add('read') : email_box.classList.add('unread');
             document.querySelector('#emails-view').append(email_box);
 
@@ -91,25 +109,40 @@ function send_email(event) {
 
 function view_email(email_id) {
 
-    fetch(`/emails/${email_id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-            read: true
-        })
-    })
-
     let email_block = document.querySelector('#email-view');
-
-    fetch(`/emails/${email_id}`)
-    .then(response => response.json())
-    .then(email => {
-        // Print email
-        console.log(email);
-        email_block.innerHTML = `<p><strong>From: </strong>${email.sender}</p><p><strong>To: </strong>${email.recipients}</p><p><strong>Subject: </strong>${email.subject}</p><p><strong>Timestamp: </strong>${email.timestamp}</p><p>${email.body}</p>`;
-    });
 
     // Show the email and hide other views
     email_block.style.display = 'block';
     document.querySelector('#emails-view').style.display = 'none';
     document.querySelector('#compose-view').style.display = 'none';
+
+    fetch(`/emails/${email_id}`)
+    .then(response => response.json())
+    .then(email => {
+        email_block.innerHTML = `<p><strong>From: </strong>${email.sender}</p><p><strong>To: </strong>${email.recipients}</p><p><strong>Subject: </strong>${email.subject}</p><p><strong>Timestamp: </strong>${email.timestamp}</p><p>${email.body}</p>`;
+
+        if (!email.read) {
+            fetch(`/emails/${email_id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    read: true
+                })
+            })
+        }
+
+        if (email.archived) {
+            archive(email, email_block, 'archive');
+        } else {
+            fetch('/emails/inbox')
+            .then(response => response.json())
+            .then(emails => {
+                emails.some(function(inboxEmail) {
+                    if (inboxEmail.id === email.id) {
+                        archive(email, email_block, 'inbox');
+                        return true;
+                    }
+                });
+            });
+        }
+    });
 }
